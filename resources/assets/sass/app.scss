@@ -5,6 +5,9 @@
 // Bootstrap
 @use 'bootstrap/scss/bootstrap';
 @use '@fortawesome/fontawesome-free/css/fontawesome';
+@use '@fortawesome/fontawesome-free/css/solid';
+@use '@fortawesome/fontawesome-free/css/regular';
+@use '@fortawesome/fontawesome-free/css/brands';
 
 // Fonts - comes after @use rules
 @import url('https://fonts.googleapis.com/css?family=Nunito');
