@@ -12,7 +12,7 @@
     <!-- Page Content Holder -->
     @include('partials.header')
     <!--// top-bar -->
-        @can('create', \App\Patient::class)
+        @can('create', \App\Models\Patient::class)
         <div class="container">
             <h1 class="text-center">LISTE DES PATIENTS</h1>
         </div>
@@ -49,21 +49,21 @@
                                     <td>{{ $patient->prise_en_charge }}</td>
                                     <td>{{ $patient->date_insertion}}</td>
                                     <td style="display: inline-flex;">
-                                    @can('consulter', \App\Patient::class)
+                                    @can('consulter', \App\Models\Patient::class)
                                         <a href="{{ route('patients.show', $patient->id) }}" title="consulter le dossier du patient" class="btn btn-primary btn-sm mr-1"><i class="fas fa-eye"></i></a>
                                         
                                     @endcan
                                     {{--
-                                    @can('create', \App\Event::class)
+                                    @can('create', \App\Models\Event::class)
                                     <a href="{{ route('events.index') }}" title="Prendre un rendez-vous" class="btn btn-info btn-sm mr-1"><i class="fas fa-calendar-plus"></i></a>
                                     @endcan
                                     --}}
-                                    @can('print', \App\Patient::class)
+                                    @can('print', \App\Models\Patient::class)
                                        
                                             <a class="btn btn-success btn-sm mr-1" title="Générer la facture" href="{{ route('consultation.pdf', $patient->id) }}" onClick='if(this.disabled){ return false; } else { this.disabled = true; }'><i class="far fa-plus-square"></i></a>
                                         </p>
                                     @endcan
-                                    @can('delete', \App\Patient::class)
+                                    @can('delete', \App\Models\Patient::class)
                                         <form action="{{ route('patients.destroy', $patient->id) }}" method="post">
                                             @csrf @method('DELETE')
                                             <p data-placement="top" data-toggle="tooltip" title="Delete">
@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-        @can('print', \App\Patient::class)
+        @can('print', \App\Models\Patient::class)
             <div class="text-center table_link_right">
 
                 <a href="{{ route('patients.create') }}" class="btn btn-primary" title="Vous allez jouter un nouveau patient dans le système">Ajouter un patient</a>

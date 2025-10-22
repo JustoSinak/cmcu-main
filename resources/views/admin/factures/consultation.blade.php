@@ -30,7 +30,7 @@
         <!-- Page Content Holder -->
         @include('partials.header')
         <!--// top-bar -->
-        @can('view', \App\User::class)
+        @can('view', \App\Models\User::class)
         <div class="container_fluid">
             <h1 class="text-center">FACTURES</h1>
             <hr>
