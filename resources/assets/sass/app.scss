@@ -1,13 +1,13 @@
 
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
-// Variables
-@import 'variables';
+// Variables - MUST be first
+@use 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
-@import '~@fortawesome/fontawesome-free/css/fontawesome';
+@use 'bootstrap/scss/bootstrap';
+@use '@fortawesome/fontawesome-free/css/fontawesome';
+
+// Fonts - comes after @use rules
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 
 .navbar-laravel {
   background-color: #fff;

@@ -1,9 +1,7 @@
-
 import _ from 'lodash';
 window._ = _;
 
-import Popper from 'popper.js';
-window.Popper = Popper.default;
+// Bootstrap 5 includes Popper.js internally, so we don't need to import it separately
 import $ from 'jquery';
 window.$ = window.jQuery = $;
 import 'bootstrap';
