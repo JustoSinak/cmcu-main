@@ -50,12 +50,12 @@
         </div>
         <hr>
             <div class="container">
-                <div class="row">
-                    <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-right"
+                <div class="d-grid gap-2 mb-2 d-md-block">
+                    <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-end"
                        title="Retour à la liste des patients">
                         <i class="fas fa-arrow-left"></i> Retour au dossier patient
                     </a>
-                    <a href="{{ route('patients.index') }}" class="btn btn-success offset-8">
+                    <a href="{{ route('patients.index') }}" class="btn btn-success offset-0">
                         <i class="fas fa-list-ul"></i>
                         Liste des patients
                     </a>
@@ -119,3 +119,5 @@
     </body>
 
 @stop
+
+

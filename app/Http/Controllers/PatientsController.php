@@ -32,8 +32,12 @@ class PatientsController extends Controller
     {
         $this->authorize('update', Patient::class);
         $name = $request->input('name');
-        $patients = Patient::where('nom', 'like', "%{$name}%")->get();
-        return view('admin.patients.index');
+        if ($name) {
+            $patients = Patient::where('nom', 'like', "%{$name}%")->paginate(10);
+        } else {
+            $patients = Patient::paginate(10);
+        }
+        return view('admin.patients.index', compact('patients', 'name'));
 
     }
 
@@ -52,6 +56,7 @@ class PatientsController extends Controller
         $request->validate([
             'name' => 'required',
             'mode_paiement' => 'required',
+            'name' => 'required',
             'prenom' => '',
             'assurance' => '',
             'assurancec' => '',
@@ -358,7 +363,7 @@ class PatientsController extends Controller
             }
         }
 
-        \Flashy::info('La liste des consommables a été mis à jour');
+         flash('La liste des consommables a été mis à jour')->info();
         return back();
     }
 
@@ -396,10 +401,12 @@ class PatientsController extends Controller
         $name = $request->input('name');
         $patients = Patient::where('prenom', 'like', "%{$name}%")
         ->orWhere('name', 'like', "%{$name}%")
-        ->get();
+        ->paginate(10);
         return view('admin.patients.index',compact('patients','name'));
 
     }
 
 
 }
+
+

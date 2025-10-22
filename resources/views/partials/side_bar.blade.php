@@ -1,3 +1,4 @@
+
 <!-- Sidebar Holder -->
 <nav id="sidebar">
     <div class="sidebar-header">
@@ -17,10 +18,10 @@
         @can('update', \App\Models\User::class)
         {{--@can('changeOwner')--}}
         <li>
-            <a href="#usersSubmenu" data-toggle="collapse" aria-expanded="false">
+            <a href="#usersSubmenu" data-bs-toggle="collapse" aria-expanded="false">
                 <i class="fas fa-users"></i>
                 Utilisateurs
-                <i class="fas fa-angle-down fa-pull-right"></i>
+                <i class="fas fa-angle-down float-end"></i>
             </a>
             <ul class="collapse list-unstyled" id="usersSubmenu">
                 <li>
@@ -41,10 +42,10 @@
         @endcan
         @can('update', \App\Models\Patient::class)
         <li>
-            <a href="#patientsSubmenu" data-toggle="collapse" aria-expanded="false">
+            <a href="#patientsSubmenu" data-bs-toggle="collapse" aria-expanded="false">
                 <i class="fas fa-users"></i>
                 Patients
-                <i class="fas fa-angle-down fa-pull-right"></i>
+                <i class="fas fa-angle-down float-end"></i>
             </a>
             <ul class="collapse list-unstyled" id="patientsSubmenu">
                 <li>
@@ -53,7 +54,7 @@
                         Liste des patients
                     </a>
                 </li>
-                <!-- 
+                <!--
                     @can('show', \App\Models\User::class)
                     <li>
                         <a href="{{ route('examens.index') }}">
@@ -86,16 +87,16 @@
 
 
         @endcan
-        <!-- @can('create', \App\Models\Produit::class)
+        <!-- @can('create', \App\Produit::class)
         <li>
-            <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false">
-                @can('print', \App\Models\Produit::class)
+            <a href="#pageSubmenu1" data-bs-toggle="collapse" aria-expanded="false">
+                @can('print', \App\Produit::class)
                 <i class="far fa-file"></i>
                 Gestion des produits
-                <i class="fas fa-angle-down fa-pull-right"></i>
+                <i class="fas fa-angle-down float-end"></i>
                 @endcan
             </a>
-            @can('print', \App\Models\Produit::class)
+            @can('print', \App\Produit::class)
             <ul class="collapse list-unstyled" id="pageSubmenu1">
                 <li>
                     <a href="{{ route('produits.index') }}">
@@ -110,7 +111,7 @@
                         Produits pharmaceutiques
                     </a>
                 </li>
-                @can('print', \App\Models\Produit::class)
+                @can('print', \App\Produit::class)
                 <li>
                     <a href="{{ route('materiels.pharmaceutique') }}">
                         <i class="fas fa-cogs"></i>
