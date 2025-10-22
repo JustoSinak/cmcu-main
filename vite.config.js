@@ -1,21 +1,23 @@
 // vite.config.js
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue'; // Ajoutez cette ligne
+import vue from '@vitejs/plugin-vue'; 
 
 export default defineConfig({
     root: '.',
-    publicDir: 'public',
+//    publicDir: false, 
     build: {
-        outDir: 'public/build', // This is the default for Laravel
-        emptyOutDir: true,
-        manifest: true,
+        manifest: 'manifest.json',
+        outDir: 'public/build',
         rollupOptions: {
-            // Suppress the public directory warning
-            output: {
-                manualChunks: undefined,
-            }
-        }
+            input: {
+               app: 'resources/assets/js/app.js',
+                'app-scss': 'resources/assets/sass/app.scss',
+                'all-scss': 'resources/css/all.scss',
+                all: 'resources/js/all.js',
+                typehead: 'resources/js/typehead.js',
+            },
+        },
     },
     plugins: [
         laravel({
@@ -27,6 +29,7 @@ export default defineConfig({
                 'resources/js/typehead.js',
             ],
             refresh: true,
+            buildDirectory: 'build',
         }),
         vue({ 
             template: {
@@ -35,15 +38,13 @@ export default defineConfig({
                     includeAbsolute: false,
                 },
             },
-        }),
-        
+        }),    
     ],
      resolve: {
         alias: {
-            '@': '/resources/assets/js',
+            // '@': '/resources/assets/js',
             '~': '/node_modules',
         },
     },
 });
-
 

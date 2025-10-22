@@ -1,0 +1,59 @@
+{
+  "_jquery-4pxIZBj_.js": {
+    "file": "assets/jquery-4pxIZBj_.js",
+    "name": "jquery",
+    "imports": [
+      "_jquery-DKenW1nw.js"
+    ]
+  },
+  "_jquery-DKenW1nw.js": {
+    "file": "assets/jquery-DKenW1nw.js",
+    "name": "jquery"
+  },
+  "resources/assets/js/app.js": {
+    "file": "assets/app-D9K1SELl.js",
+    "name": "app",
+    "src": "resources/assets/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-4pxIZBj_.js",
+      "_jquery-DKenW1nw.js"
+    ]
+  },
+  "resources/assets/sass/app.scss": {
+    "file": "assets/app-scss-Dglu5LEz.css",
+    "src": "resources/assets/sass/app.scss",
+    "isEntry": true,
+    "names": [
+      "app-scss.css"
+    ]
+  },
+  "resources/css/all.scss": {
+    "file": "assets/all-scss-qYnbTHTa.css",
+    "src": "resources/css/all.scss",
+    "isEntry": true,
+    "names": [
+      "all-scss.css"
+    ]
+  },
+  "resources/js/all.js": {
+    "file": "assets/all-DfD1olSt.js",
+    "name": "all",
+    "src": "resources/js/all.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-4pxIZBj_.js",
+      "resources/js/typehead.js",
+      "_jquery-DKenW1nw.js"
+    ]
+  },
+  "resources/js/typehead.js": {
+    "file": "assets/typehead-UhImJAUm.js",
+    "name": "typehead",
+    "src": "resources/js/typehead.js",
+    "isEntry": true,
+    "imports": [
+      "_jquery-DKenW1nw.js"
+    ]
+  }
+}
