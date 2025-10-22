@@ -14,10 +14,12 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset('admin/images/faviconlogo.ico') }}" />
 
     <link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
-
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
+    
+    <!-- Load jQuery first, before Vite -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
     @yield('link')
     <script>
         addEventListener("load", function() {
@@ -30,10 +32,10 @@
     </script>
 
 </head>
+<body>
+<!-- Modal content here -->
 <div id="myModal" data-backdrop="static" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <img src="{{ asset('admin/images/licence_image.jpg') }}" class="offset-4">
@@ -53,30 +55,27 @@
                     </div>
                 </form>
             </div>
-
         </div>
-
     </div>
 </div>
+
 @yield('content')
 
-
-
+<!-- Load Vite bundles -->
 @vite(['resources/js/all.js', 'resources/assets/js/app.js', 'resources/js/typehead.js'])
-{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>--}}
+
+<!-- Load jQuery-dependent scripts AFTER Vite -->
 <script src="{{ asset('admin/datatables/js/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('admin/datatables/js/dataTables.bootstrap4.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js"></script>
-
-
-
-
 <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
+
+<!-- Wrap all jQuery code in document ready -->
 <script>
     $(document).ready(function() {
+        // DataTables initialization
         $('#myTable').DataTable({
             "dom": '<"top"i <"d-flex justify-content-between"l<"toolbar">f>>rt<"bottom d-flex justify-content-between mt-3"p><"clear">',
-            //scrollY: 300,
             scrollX: true,
             processing: true,
             info: false,
@@ -124,103 +123,115 @@
                 }
             }
         });
+        
         $("div.toolbar").html($('.table_info'));
         $("div.bottom").prepend($('.table_link_right'));
+        
         $('.filter-select').change(function() {
             table.column($(this).data('column'))
                 .search($(this).val())
                 .draw();
         });
-    });
-</script>
 
-<script type="text/javascript">
-    var path = "{{ route('autocomplete') }}";
-    $('#search').typeahead({
-        minLength: 1,
-        hint: true,
-        highlight: true,
-        source: function(query, process) {
-            return $.get(path, {
-                query: query
-            }, function(data) {
-                return process(data);
-            });
-        },
-    });
-</script>
+        // Typeahead
+        var path = "{{ route('autocomplete') }}";
+        $('#search').typeahead({
+            minLength: 1,
+            hint: true,
+            highlight: true,
+            source: function(query, process) {
+                return $.get(path, {
+                    query: query
+                }, function(data) {
+                    return process(data);
+                });
+            },
+        });
 
-<script>
-    $(document).ready(function() {
-        //initialize tooltips
+        // Initialize tooltips
         $('[data-toggle="tooltip"]').tooltip();
 
-
+        // Table toggler
         $(".tbtn").click(function() {
             $(this).parents(".custom-table").find(".toggler1").removeClass("toggler1");
             $(this).parents("tbody").find(".toggler").addClass("toggler1");
             $(this).parents(".custom-table").find(".fa-minus-circle").removeClass("fa-minus-circle");
             $(this).parents("tbody").find(".fa-plus-circle").addClass("fa-minus-circle");
         });
-    });
-</script>
-<script>
-$(document).ready(function(){
-  $('[data-toggle="popover"]').popover();
-});
-</script>
-<script>
-    $('#mode_paiement').change(function(event){
-        if($(this).val() == 'chèque' && !$('._cheque').length){
-            $('.m_paiement').after(
-                '<div class="form-group _cheque">'+
-                
-                                    '<label for="num_cheque" class="col-form-label text-md-right" >Numéro du chèque </label>'+
-                                    '<input name="num_cheque" id="num_cheque" class="form-control" value="" type="text"  >'+
-                                '</div>'+
-                                '<div class="form-group _cheque">'+
-                                    '<label for="emetteur_cheque" class="col-form-label text-md-right" >Emetteur du chèque </label>'+
-                                    '<input name="emetteur_cheque" id="emetteur_cheque" class="form-control" value="" type="text" >'+
-                                '</div>'+
-                                '<div class="form-group _cheque">'+
-                                    '<label for="banque_cheque" class="col-form-label text-md-right">Banque </label>'+
-                                    '<input name="banque_cheque" id="banque_cheque" class="form-control" value="" type="text" >'+
-                            '</div>'
-            );
-        }
-        else{
-            if($('._cheque').length){
-                $("._cheque").remove();
+
+        // Popover
+        $('[data-toggle="popover"]').popover();
+
+        // Mode paiement change handler
+        $('#mode_paiement').change(function(event){
+            if($(this).val() == 'chèque' && !$('._cheque').length){
+                $('.m_paiement').after(
+                    '<div class="form-group _cheque">'+
+                        '<label for="num_cheque" class="col-form-label text-md-right" >Numéro du chèque </label>'+
+                        '<input name="num_cheque" id="num_cheque" class="form-control" value="" type="text"  >'+
+                    '</div>'+
+                    '<div class="form-group _cheque">'+
+                        '<label for="emetteur_cheque" class="col-form-label text-md-right" >Emetteur du chèque </label>'+
+                        '<input name="emetteur_cheque" id="emetteur_cheque" class="form-control" value="" type="text" >'+
+                    '</div>'+
+                    '<div class="form-group _cheque">'+
+                        '<label for="banque_cheque" class="col-form-label text-md-right">Banque </label>'+
+                        '<input name="banque_cheque" id="banque_cheque" class="form-control" value="" type="text" >'+
+                    '</div>'
+                );
             }
-        }
-        if($(this).val() == 'bon de prise en charge' && !$('._bpc').length){
-            $('.m_paiement').after(
-                '<div class="form-group _bpc">'+
-                                    '<label for="emetteur_bpc" class="col-form-label text-md-right" title="Somme des précédents versements du client">Emetteur </label>'+
-                                    '<input name="emetteur_bpc" id="emetteur_bpc" class="form-control" value="" type="text" >'+
-                                '</div>'
-            );
-        }
-        else{
-            if($('._bpc').length){
-                $("._bpc").remove();
+            else{
+                if($('._cheque').length){
+                    $("._cheque").remove();
+                }
             }
-        }
+            
+            if($(this).val() == 'bon de prise en charge' && !$('._bpc').length){
+                $('.m_paiement').after(
+                    '<div class="form-group _bpc">'+
+                        '<label for="emetteur_bpc" class="col-form-label text-md-right" title="Somme des précédents versements du client">Emetteur </label>'+
+                        '<input name="emetteur_bpc" id="emetteur_bpc" class="form-control" value="" type="text" >'+
+                    '</div>'
+                );
+            }
+            else{
+                if($('._bpc').length){
+                    $("._bpc").remove();
+                }
+            }
+        });
     });
 </script>
 
 @yield('script')
+
 @php
 $licence = \App\Models\Licence::where('client', 'cmcuapp')->first();
 @endphp
-
-@if ($licence->expire_date <= \Carbon\Carbon::now()) <script type="text/javascript">
-    $(window).on('load',function(){
-    $('#myModal').modal('show');
+<!-- 
+@if ($licence && $licence->expire_date <= \Carbon\Carbon::now())
+<script type="text/javascript">
+    $(window).on('load', function(){
+        $('#myModal').modal('show');
     });
+</script>
+@endif -->
+
+
+@unless(env('BYPASS_LICENSE'))
+    @if ($licence && $licence->expire_date <= \Carbon\Carbon::now())
+    <script type="text/javascript">
+        waitForjQuery(function() {
+            $(window).on('load',function(){
+                $('#myModal').modal('show');
+            });
+        });
     </script>
     @endif
+@endunless
 
-    @include('flash::message')
 
+@include('flash::message')
+
+</body>
 </html>

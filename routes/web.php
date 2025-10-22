@@ -103,7 +103,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'] ], function () {
     Route::get('prescription_examens/{id}','PrescriptionController@export_prescription')->name('prescription_examens.pdf');
 
     
-    Route::get('dossiers/create', 'DossiersController@create')->name('dossiers.create');
     Route::get('dossiers/create/{patient}', 'DossiersController@create')->name('dossiers.create');
     Route::post('dossiers', 'DossiersController@store')->name('dossiers.store');
     Route::patch('dossiers/{dossier}', 'DossiersController@update')->name('dossiers.update');
@@ -162,7 +161,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'] ], function () {
     Route::post('factures-devis', 'FactureController@FactureDevisStore')->name('facture_devis.store');
     Route::get('factures-devis/{id}', 'FactureController@export_facture_devis')->name('facture_devis.pdf');
     Route::get('factures/{facture}', 'FactureController@show')->name('factures.show');
-    Route::delete('facture', 'FactureController@destroy')->name('factures.destroy');
     Route::delete('facture/{id}', 'FactureController@destroy')->name('factures.destroy');
     Route::get('factures-consultation', 'FactureController@FactureConsultation')->name('factures.consultation');
     Route::post('factures-consultation', 'FactureController@FactureConsultation')->name('search.date');
