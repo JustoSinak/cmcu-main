@@ -221,6 +221,6 @@ $licence = \App\Models\Licence::where('client', 'cmcuapp')->first();
     </script>
     @endif
 
-    @include('flashy::message')
+    @include('flash::message')
 
 </html>
