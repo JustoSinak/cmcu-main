@@ -244,6 +244,7 @@ return [
         'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
         'Html' => Spatie\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'PDF' => ZanySoft\LaravelPDF\Facades\PDF::class,
 
     ],
 

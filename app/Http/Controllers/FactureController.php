@@ -6,7 +6,7 @@ use App\Models\Facture;
 use App\Models\FactureChambre;
 use App\Models\FactureDevi;
 // use Barryvdh\DomPDF\Facade as PDF;
-use ZanySoft\LaravelPDF\PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
 
 use App\Models\FactureConsultation;
 use App\Models\FactureClient;
@@ -377,7 +377,7 @@ class FactureController extends Controller
             $totalPartPatient += $tFactures[$key]['partPatient'];
         }
 
-        $pdf = PDF::loadView('admin.etats.bilan_consultation', [
+         $pdf = PDF::loadView('admin.etats.bilan_consultation', [
             'mode_paiement' => $modePaiement,
             'service' => $service==""? "" : '- '.$service,
             'tFactures' => $tFactures,
@@ -407,7 +407,7 @@ class FactureController extends Controller
 
 
 
-        $pdf = PDF::loadView('admin.etats.bilan_clientexterne', [
+         $pdf = PDF::loadView('admin.etats.bilan_clientexterne', [
             'factures' => $factures,
             'totalPercu' => $totalPercu,
             'avances' => $avances,

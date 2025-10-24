@@ -4,8 +4,6 @@
 
 @section('content')
 
-    <body>
-
     <style type="text/css">
         .tt-dropdown-menu {
             width: 100% !important;
@@ -314,6 +312,5 @@
             @include('admin.modal.detail_premedication_preparation')
         @endcan
     </div>
-    </body>
 
 @stop

@@ -319,7 +319,7 @@
                                         </a>
                                         @endisset
                                         @empty($dossiers)
-                                        <a class="btn btn-secondary" href="#" data-placement="top" data-bs-toggle="popover" data-trigger="focus" data-content="Vous devez d'abord compléter le dossier patient !" title="Fiche de prise des paramètres">
+                                        <a class="btn btn-secondary" href="#" data-placement="top" data-toggle="popover" data-trigger="focus" data-content="Vous devez d'abord compléter le dossier patient !" title="Fiche de prise des paramètres">
                                             <i class="fas fa-heartbeat"></i> Fiche De Paramètres
                                         </a>
                                         @endempty
@@ -352,11 +352,11 @@
                                 <small>DÉTAILS ACTION</small>
                             </div>
                             <div class="card-body">
-                                <button type="button" class="btn btn-primary" title="Liste des ordonnances pour ce patient" data-bs-toggle="modal" data-target="#ordonanceAll" data-whatever="@mdo">
+                                <button type="button" class="btn btn-primary" title="Liste des ordonnances pour ce patient" data-toggle="modal" data-target="#ordonanceAll" data-whatever="@mdo">
                                     <i class="fas fa-file-prescription"></i> Ordonnances
                                 </button>
                                         
-                                <button type="button" class="btn btn-primary" title="Liste des examens pour ce patient" data-bs-toggle="modal" data-target="#biologieAll" data-whatever="@mdo">
+                                <button type="button" class="btn btn-primary" title="Liste des examens pour ce patient" data-toggle="modal" data-target="#biologieAll" data-whatever="@mdo">
                                     <i class="fas fa-flask"></i> Examens Biologiques
                                 </button>
 
@@ -389,7 +389,7 @@
                                     <i class="fas fa-hospital-user"></i> Surveillance Post-Anesthésique
                                 </a>
                                         
-                                <button type="button" class="btn btn-primary" title="Fiches d'intervention" data-bs-toggle="modal" data-target="#FicheInterventionAll" data-whatever="@mdo">
+                                <button type="button" class="btn btn-primary" title="Fiches d'intervention" data-toggle="modal" data-target="#FicheInterventionAll" data-whatever="@mdo">
                                     <i class="fas fa-tasks"></i> Fiche d'Intervention
                                 </button>
                                         
@@ -403,7 +403,7 @@
                                         <i class="fas fa-print"></i> Lettre De Consultation
                                     </a>
                                             
-                                    <button type="button" class="btn btn-primary" title="Liste de fiches pour ce patient" data-bs-toggle="modal" data-target="#ficheSuiviAll" data-whatever="@mdo">
+                                    <button type="button" class="btn btn-primary" title="Liste de fiches pour ce patient" data-toggle="modal" data-target="#ficheSuiviAll" data-whatever="@mdo">
                                         <i class="fas fa-file-alt"></i> Fiche De Suivi
                                     </button>
                                     @endcan

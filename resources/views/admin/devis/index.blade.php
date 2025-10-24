@@ -58,7 +58,7 @@
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title"></h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
 
@@ -230,10 +230,10 @@
                 <div class="modal-footer px-0">
                     <div class="col-12">
                         @can('update', \App\Models\Devi::class)
-                        <button type="submit" class="btn btn-info devis_save" data-dismiss="modal">Enregistrer</button>
+                        <button type="submit" class="btn btn-info devis_save" data-bs-dismiss="modal">Enregistrer</button>
                         @endcan
-                        <button type="button" class="btn btn-danger float-end" data-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-primary float-end mx-3 devis_export" data-dismiss="modal">Exporter</button>
+                        <button type="button" class="btn btn-danger float-end" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary float-end mx-3 devis_export" data-bs-dismiss="modal">Exporter</button>
 
                     </div>
 

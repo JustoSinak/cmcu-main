@@ -17,7 +17,7 @@
         }
     </script>
 
-    <link href="{{ asset('admin/css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <!-- Bootstrap 5 CSS is loaded via Vite in app.scss -->
     <link rel="stylesheet" href="{{ asset('admin/css/bar.css') }}">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
     <link href="{{ asset('login.css') }}" rel="stylesheet" type="text/css" media="all" />
