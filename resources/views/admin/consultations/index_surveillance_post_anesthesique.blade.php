@@ -11,7 +11,7 @@
 
         @include('partials.header')
         @can('show', \App\Models\User::class)
-            <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-right"
+            <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-end"
                title="Retour à la liste des patients">
                 <i class="fas fa-arrow-left"></i> Retour au dossier patient
             </a>
@@ -33,7 +33,7 @@
                                         <tr>
                                             <td class="table-active"><b class="badge badge-danger">DATE: {{ $surveillance_post_anesthesique->date_creation }}</b></td>
                                             <td class="table-active">
-                                                <a href="{{ route('surveillance_post_anesthesise.index', $surveillance_post_anesthesique->id) }}" class="btn btn-primary mb-1" id="SpostAnesthUpdate{{ $surveillance_post_anesthesique->id }}" data-toggle="modal" data-target="#SpostAnesthUpdate"
+                                                <a href="{{ route('surveillance_post_anesthesise.index', $surveillance_post_anesthesique->id) }}" class="btn btn-primary mb-1" id="SpostAnesthUpdate{{ $surveillance_post_anesthesique->id }}" data-bs-toggle="modal" data-target="#SpostAnesthUpdate"
                                                         title="Apporter des modifications" data-whatever="@mdo">
                                                     <i class="far fa-edit"></i>
                                                 </a>

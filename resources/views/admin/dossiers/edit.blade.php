@@ -15,18 +15,18 @@
         <div class="container">
             <h1 class="text-center">MODIFIER LE DOSSIER DU PATIENT {{$patient->name}} {{$patient->prenom}}</h1>
             <hr>
-                <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-right"
+                <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-end"
                     title="Retour à la liste des patients">
                     <i class="fas fa-arrow-left"></i> Retour au dossier patient
                 </a>
             @include('partials.flash_form')
-            <form class="form-row mt-4" method="POST" action="{{ route('dossiers.update', $dossier->id) }}">
+            <form class="row g-3 mt-4" method="POST" action="{{ route('dossiers.update', $dossier->id) }}">
             {{method_field('PATCH')}} @csrf
 
             <input type="hidden" value="{{ $dossier->patient_id }}" name="patient_id">
-                <div class="col-md-8 pb-3">
+                <div class="col-md-8">
                     <label for="exampleAccount">Sexe</label>
-                    <div class="form-group small">
+                    <div class="mb-3 small">
                         <div class="form-check form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" type="radio" name="sexe" id="sexe" value="Masculin"> Masculin
@@ -40,42 +40,42 @@
                     </div>
                 </div>
                
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="date_naissance">Date de naissance</label>
                     <input type="date" class="form-control" value="{{ $dossier->date_naissance }}" name="date_naissance" placeholder="Date de naissance">
                 </div>
  
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="exampleLast">Profession</label>
                     <input type="text" value="{{ $dossier->profession }}" class="form-control" name="profession" placeholder="Profession du patient">
                 </div>
 
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="lieu_naissance">Lieu de naissance</label>
                     <input type="text" class="form-control" value="{{ $dossier->lieu_naissance }}" name="lieu_naissance" placeholder="Lieu de naissance">
                 </div>
 
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="adresse">Portable</label>
                     <input type="number" class="form-control" value="{{ $dossier->portable_1 }}" name="portable_1" placeholder="Portable">
                 </div>
 
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="adresse">Portable 2</label>
                     <input type="number" class="form-control" value="{{ $dossier->portable_2 }}" name="portable_2" placeholder="Portable 2">
                 </div>
 
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="adresse">Adresse</label>
                     <input type="text" class="form-control" value="{{ $dossier->adresse }}" name="adresse" placeholder="Adresse du patient">
                 </div>
 
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="personne_contact">Personne à contacter</label>
                     <input type="text" class="form-control" value="{{ $dossier->personne_contact }}" name="personne_contact" placeholder="Personne à contacter">
                 </div>
 
-                <div class="col-sm-6 pb-3">
+                <div class="col-sm-6">
                     <label for="tel_personne_contact">Téléphone personne à contacter</label>
                     <input type="number" class="form-control" value="{{ $dossier->tel_personne_contact }}" name="tel_personne_contact" placeholder="Téléphone personne à contacter">
                 </div>

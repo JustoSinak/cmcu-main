@@ -20,6 +20,7 @@ use App\Models\VisitePreanesthesique;
 // use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Cache;
 // use MercurySeries\Flashy\Flashy;
 use Laracasts\Flash\Flash;
 use ZanySoft\LaravelPDF\PDF;
@@ -408,5 +409,6 @@ class PatientsController extends Controller
 
 
 }
+
 
 

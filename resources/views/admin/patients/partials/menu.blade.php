@@ -1,5 +1,5 @@
 @can('anesthesiste', \App\Models\Patient::class)
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
         Menu
         <span class="caret"></span></button>
     <ul class="dropdown-menu">
@@ -30,7 +30,7 @@
         </li>
     </ul>
 
-    <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#SpostAnesth"
+    <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-target="#SpostAnesth"
             title="Surveillance post anesthésique" data-whatever="@mdo">
         <i class="far fa-plus-square"></i> Surveillance Post Anesthésique
     </button>
@@ -41,11 +41,11 @@
 {{--    </a>--}}
 @endcan
 @can('chirurgien', \App\Models\Patient::class)
-    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+    <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown">
         Menu
         <span class="caret"></span></button>
     <ul class="dropdown-menu">
-        <button type="button" class="btn btn-primary mb-1" data-toggle="modal"
+        <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal"
                 data-target="#FicheInterventionAnesthesiste"
                 title="Ajouter une fiche d'intervention" data-whatever="@mdo">
             <i class="far fa-plus-square"></i>
@@ -53,7 +53,7 @@
         </button>
         
         <li>
-            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#SpostAnesth"
+            <button type="button" class="btn btn-primary mb-1" data-bs-toggle="modal" data-target="#SpostAnesth"
                     title="Surveillance post anesthésique" data-whatever="@mdo">
                 <i class="far fa-plus-square"></i> Surveillance Post Anesthésique
             </button>
@@ -72,7 +72,7 @@
         <i class="far fa-plus-square"></i>
         Ordonnances
     </a>
-    <button type="button" class="btn btn-primary" data-toggle="modal"
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
             data-target="#ordonanceModal"
             title="Prescrire un examen complémentaire" data-whatever="@mdo">
         <i class="far fa-plus-square"></i> Examens Complémentaires
@@ -89,7 +89,7 @@
 @endcan
 
 @can('infirmier', \App\Models\Patient::class)
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
         Menu
         <span class="caret"></span></button>
     <ul class="dropdown-menu">

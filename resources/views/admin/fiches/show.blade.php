@@ -9,10 +9,10 @@
     @include('partials.header')
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-6">
+            <div class="col-12 col-6 col-lg-6">
                 <div class="card bg-light card-body mb-3 card bg-faded p-1 mb-3">
                     <div class="row">
-                        <div class="col-md-6 col-lg-8">
+                        <div class="col-6 col-lg-8">
                             <p> Nom: {{ $fiche->nom }}</p><br>
                             <p> Prénom: {{ $fiche->prenom }}</p><br>
                             <p> Numéro de chambre: {{ $fiche->chambre_numero }}</p><br>

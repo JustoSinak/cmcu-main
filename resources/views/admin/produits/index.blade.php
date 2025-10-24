@@ -51,7 +51,7 @@
                                     <td>
                                         <form action="{{ route('produits.destroy', $produit->id) }}" method="post">
                                             @csrf @method('DELETE')
-                                            <p data-placement="top" data-toggle="tooltip" title="Supprimer le produit du stock">
+                                            <p data-placement="top" data-bs-toggle="tooltip" title="Supprimer le produit du stock">
                                                 <button type="submit" class="btn btn-danger btn-sm"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
                                             </p>
                                         </form>

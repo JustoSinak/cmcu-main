@@ -14,11 +14,11 @@
             <div class="col-md-6">
                 <form method="post" action="{{ route('chambres.store') }}">
                     @csrf
-                    <div class="form-group">
+                    <div class="mb-3 fw-bold">
                         <label for="name">NUMERO:</label>
                         <input type="text" class="form-control" name="numero"  />
                     </div>
-                    <div class="form-group">
+                    <div class="mb-3 fw-bold">
                         <label for="exampleFormControlSelect1">CATEGORIE</label>
                         <select class="form-control" name="categorie" id="exampleFormControlSelect1">
                             <option value="">Veuillez choisir la catégorie</option>

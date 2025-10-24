@@ -1,10 +1,25 @@
+<style>
+@media (max-width: 576px) {
+    .dropdown-menu {
+        min-width: 18rem;
+        max-width: calc(100vw - 30px);
+        right: -10%;
+    }
+}
+@media (max-width: 768px) {
+	.dropdown-menu {
+		min-width: 18rem;
+		max-width: calc(100vw - 40px);
+	}
+}
+</style>
 <div id="content">
     <!-- top-bar -->
-    <nav class="navbar navbar-default mb-xl-5 mb-4">
-        <div class="container-fluid">
+    <nav class="navbar navbar-light bg-light mb-xl-5 mb-4">
+        <div class="container-fluid position-relative">
 
             <div class="navbar-header">
-                <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn float-left">
+                <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn float-start">
                     <i class="fas fa-bars"></i>
                 </button>
                 
@@ -14,14 +29,14 @@
                     
                 </h4>
             </div>
-            <ul class="top-icons-agileits-w3layouts float-right">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true"
+            <ul class="top-icons-agileits-w3layouts float-end" style="position: relative;">
+                <li class="nav-item dropdown" style="position: relative;">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
                         <i class="far fa-user"></i>
                     </a>
-                    <div class="dropdown-menu drop-3">
-                        <div class="profile d-flex mr-o">
+                    <div class="dropdown-menu drop-menu-end" style="right: 0;left: auto;min-width: 20rem;max-width: calc(100vw - 40px);padding: 1em;position: absolute;overflow-y: auto;max-height: 90vh;">
+                        <div class="profile d-flex me-o">
                             <div class="profile-l align-self-center">
                                 <img src="{{ asset('admin/images/logo.jpg') }}" class="img-fluid mb-3" alt="Responsive image">
                             </div>
@@ -32,7 +47,7 @@
                         </div>
                         <a href="{{ route('users.profile', Auth::user()->id) }}" class="dropdown-item mt-3">
                             <h4>
-                                <i class="far fa-user mr-3"></i>Mon profile</h4>
+                                <i class="far fa-user me-3"></i>Mon profile</h4>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}"

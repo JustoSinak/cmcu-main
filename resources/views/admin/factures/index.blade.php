@@ -39,13 +39,13 @@
                                     <td>{{$facture->prix_total }}</td>
                                     <td>{{$facture->created_at }}</td>
                                     <td style="display: inline-flex;">
-                                        <p class="mr-2" data-placement="top" data-toggle="tooltip" title="Voire les détails">
+                                        <p class="me-2" data-placement="top" data-bs-toggle="tooltip" title="Voire les détails">
                                             <a href="{{ route('factures.show', $facture->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
                                         </p>
-                                        @can('update', \App\User::class)
+                                        @can('update', \App\Models\User::class)
                                         <form action="{{ route('factures.destroy', $facture->id) }}" method="post">
                                             @csrf @method('DELETE')
-                                            <p data-placement="top" data-toggle="tooltip" title="Supprimer la facture">
+                                            <p data-placement="top" data-bs-toggle="tooltip" title="Supprimer la facture">
                                                 <button type="submit" class="btn btn-danger btn-sm"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
                                             </p>
                                         </form>

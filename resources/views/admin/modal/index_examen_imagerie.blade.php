@@ -2,16 +2,16 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">EXAMENS IMAGERIE</h5>
+                <h5 class="modal-title" id="exampleModalLabel" style="font-size:14px;">EXAMENS IMAGERIE</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span style="font-size:14px;" aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 @if (count($patient->imageries))
 
                     <div class="table-responsive">
-                        <table id="myTable" class="table table-bordred table-striped">
+                        <table id="myTable" class="table table-bordred table-striped" style="font-size:16px;">
                             <thead>
                             <th>DESCRIPTION</th>
                             <th>DATE</th>
@@ -33,7 +33,7 @@
                                     <td>{{ $imagerie->created_at->toFormattedDateString() }}</td>
                                     <td>
                                         <a class="btn btn-success btn-sm" title="Imprimer l'ordonance" href="{{ route('imageries_examens.pdf', $imagerie->id) }}">
-                                            <i class="fas fa-print"></i>
+                                            <i style="font-size:16px;" class="fas fa-print"></i>
                                         </a>
                                     </td>
                                 </tr>

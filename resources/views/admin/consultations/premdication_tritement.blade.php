@@ -44,17 +44,17 @@
         @include('partials.header')
         @can('show', \App\Models\User::class)
             <div class="col-md-12  toppad  offset-md-0 ">
-                @can('infirmier', \App\Models\Patient::class)
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#DetailPremedication" title="Détails prémédication / préparation" data-whatever="@mdo">
+                @can('infirmier', App\Models\Patient::class)
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-target="#DetailPremedication" title="Détails prémédication / préparation" data-whatever="@mdo">
                     <i class="fas fa-eye"></i> Consignes IDE / Préparations
                 </button>
                 @endcan
-                @can('anesthesiste', \App\Models\Patient::class)
-                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#DetailPremedication" title="Détails prémédication / préparation" data-whatever="@mdo">
+                @can('anesthesiste', App\Models\Patient::class)
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-target="#DetailPremedication" title="Détails prémédication / préparation" data-whatever="@mdo">
                             <i class="fas fa-eye"></i> Détails
                         </button>
                 @endcan
-                <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-right">
+                <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-end">
                     <i class="fas fa-arrow-left"></i>  Retour au dossier patient
                 </a>
             </div>
@@ -153,7 +153,7 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <input type="submit" class="btn btn-primary mb-2 float-right" value="Enregistrer" />
+                                        <input type="submit" class="btn btn-primary mb-2 float-end" value="Enregistrer" />
                                         <input name="patient_id" value="{{ $patient->id }}" type="hidden">
                                     </form>
                                 </div>
@@ -257,7 +257,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <input type="submit" class="btn btn-primary mb-2 float-right" value="Enregistrer" />
+                            <input type="submit" class="btn btn-primary mb-2 float-end" value="Enregistrer" />
                             <input name="patient_id" value="{{ $patient->id }}" type="hidden">
                         </form>
                     </div>

@@ -9,19 +9,19 @@
         @include('partials.header')
         <div class="container">
             <div class="row">
-                <div class="col-md-12  toppad  offset-md-0 ">
-                    <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-right"><i
-                            class="fas fa-arrow-left"></i> Retour au dossier patient</a>
+                <div class="col-12  toppad  offset-md-0 ">
+                    <a href="{{ route('patients.show', $patient->id) }}" class="btn btn-success float-end"><i
+                            class="fas fa-arrow-left "></i> Retour au dossier patient</a>
                 </div>
                 <br>
                 <br>
                 @can('medecin', \App\Models\Patient::class)
-                <div class="col-md-10  offset-md-0  toppad">
+                <div class="col-10  offset-md-0  toppad">
                     <div class="card">
                         <div class="card-body">
                             @include('partials.flash_form')
-                            <h3 class="card-title">Informations relatives au dossier du patient {{ $patient->name }} {{$patient->prenom}}</h3>
-                            <small class="text-danger"><i><strong><i class="fas fa-exclamation-triangle"></i> Attention
+                            <h3 class="card-title" style="font-size: 24px;">Informations relatives au dossier du patient {{ $patient->name }} {{$patient->prenom}}</h3>
+                            <small class="text-danger" style="font-size: 24px;"><i><strong><i class="fas fa-exclamation-triangle"></i> Attention
                                         !! espace réservé au médecin</strong></i>
                             </small>
                             <table class="table table-user-information ">
@@ -39,14 +39,14 @@
                 </div>
                 @endcan
                 @can('infirmier', \App\Models\Patient::class)
-                    <div class="col-md-6  offset-md-0  toppad">
+                    <div class="col-10  offset-md-0  toppad">
                         <div class="card">
                             <div class="card-body">
-                                <div class="card-title text-uppercase text-primary"><b>Prise des paramètres du patient {{ $patient->name }} {{$patient->prenom}}</b>
+                                <div class="card-title text-uppercase text-primary" style="font-size: 24px;"><b>Prise des paramètres du patient {{ $patient->name }} {{$patient->prenom}}</b>
                                     <small><strong></strong></small>
                                 </div>
-                                <small class="text-info" title="La prise des paramètres du patient doit être quotidienne"><i
-                                        class="fas fa-info-circle"></i></small>
+                                <small class="text-info" style="font-size: 18px;" title="La prise des paramètres du patient doit être quotidienne"><i
+                                        class="fas fa-info-circle"></i>La prise des paramètres du patient doit être quotidienne</small>
                                 @include('admin.consultations.infirmiers.form.fiche_parametre_form')
                             </div>
                         </div>

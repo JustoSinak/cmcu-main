@@ -149,7 +149,7 @@
         });
 
         // Initialize tooltips
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="tooltip"]').tooltip();
 
         // Table toggler
         $(".tbtn").click(function() {
@@ -160,7 +160,7 @@
         });
 
         // Popover
-        $('[data-toggle="popover"]').popover();
+        $('[data-bs-toggle="popover"]').popover();
 
         // Mode paiement change handler
         $('#mode_paiement').change(function(event){

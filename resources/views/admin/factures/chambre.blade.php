@@ -44,13 +44,13 @@
                                     <td>{{$facture->duree }}</td>
                                     <td>{{$facture->tarif }} <b>FCFA</b></td>
                                     <td style="display: inline-flex;">
-                                        <p class="mr-2" data-placement="top" data-toggle="tooltip" title="Voire les détails">
-                                            <a class="btn btn-success btn-sm mr-1" title="Imprimer la facture de consultation" href="{{ route('factures.consultation_pdf', $facture->id) }}"><i class="fas fa-print"></i></a>
+                                        <p class="me-2" data-placement="top" data-bs-toggle="tooltip" title="Voire les détails">
+                                            <a class="btn btn-success btn-sm me-1" title="Imprimer la facture de consultation" href="{{ route('factures.consultation_pdf', $facture->id) }}"><i class="fas fa-print"></i></a>
                                         </p>
                                         @can('update', \App\Models\User::class)
                                             <form action="{{ route('factures.destroy', $facture->id) }}" method="post">
                                                 @csrf @method('DELETE')
-                                                <p data-placement="top" data-toggle="tooltip" title="Supprimer la facture">
+                                                <p data-placement="top" data-bs-toggle="tooltip" title="Supprimer la facture">
                                                     <button type="submit" class="btn btn-danger btn-sm"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
                                                 </p>
                                             </form>
@@ -63,7 +63,7 @@
                         {{--{{ $factures->links() }}--}}
                     </div>
                 </div>
-                    <form class="form-group table_link_right mb-0" method="POST" action="{{ route('bilan_consultation.pdf') }}">
+                    <form class="mb-3 table_link_right mb-0" method="POST" action="{{ route('bilan_consultation.pdf') }}">
                         @csrf
                         <div class="input-group mb-0">
                         <select name="day" class="form-control" required>

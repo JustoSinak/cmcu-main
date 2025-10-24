@@ -13,7 +13,7 @@
     @include('partials.header')
     <!--// top-bar -->
         <div class="container">
-            <h1 class="text-center">LISTE DES UTILISATEURS</h1>
+            <h1 class="text-center" >LISTE DES UTILISATEURS</h1>
         </div>
         <hr>
         <div class="container">
@@ -55,7 +55,7 @@
                                     <td>
                                         <form action="{{ route('users.destroy', $user->id) }}" method="post">
                                             @csrf @method('DELETE')
-                                            <p data-placement="top" data-toggle="tooltip" title="Delete">
+                                            <p data-placement="top" data-bs-toggle="tooltip" title="Delete">
                                                 <button type="submit" class="btn btn-danger btn-sm"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
                                             </p>
                                         </form>

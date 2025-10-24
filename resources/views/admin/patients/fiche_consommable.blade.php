@@ -45,7 +45,7 @@
         @can('show', \App\Models\User::class)
         <div class="row mb-1">
             <div class="col-sm-12">
-                <h1 class="text-center ">FICHES DE CONSOMMABLES </h1>
+                <h1 class="text-center">FICHES DE CONSOMMABLES </h1>
             </div>
         </div>
         <hr>
@@ -73,25 +73,29 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {{ Form::model($consommable, ['route' => ['fiche_consommable.store', $consommable->id], 'method' => 'post', 'class'=>'form-horizontal form-label-left']) }}
+                           
+                             
+                             {!! Html::form('POST', route('fiche_consommable.store', $consommable->id)) !!}
                             @csrf
-                                {{ Form::hidden('patient_id', $patient->id, ['']) }}
-                                {{ Form::hidden('user_id', $user_id, ['']) }}
+                               
+                                {!! Html::input('hidden', 'patient_id', $patient->id, ['']) !!}
+
+                                  {!! Html::input('hidden', 'user_id', $user_id) !!}
                                 <tr>
-                                    <td>{{ Form::search('consommable', null, ['class' => 'form-control col-md-10 typeahead tt-query', 'spellcheck' => 'false', 'autocomplete' => 'off', 'id' => 'search', 'required' => 'required']) }}</td>
-                                    <td>{{ Form::number('jour', null, ['class' => 'form-control', 'min' => 0]) }}</td>
-                                    <td>{{ Form::number('nuit', null, ['class' => 'form-control', 'min' => 0]) }}</td>
-                                    <td class="border-right-0">{{ Form::date('date', Carbon\Carbon::now()->ToDateString(), ['class' => 'form-control', 'required' => 'required']) }}</td>
+                                    <td>{!! Html::input('search', 'consommable', null, ['class' => 'form-control col-md-10 typeahead tt-query', 'spellcheck' => 'false', 'autocomplete' => 'off', 'id' => 'search', 'required' => 'required']) !!}</td>
+                                    <td>{!! Html::input('number', 'jour', null, ['class' => 'form-control', 'min' => 0]) !!}</td>
+                                    <td>{!! Html::input('number', 'nuit', null, ['class' => 'form-control', 'min' => 0]) !!}</td>
+                                    <td class="border-right-0">{!! Html::input('date', 'date', Carbon\Carbon::now()->ToDateString(), ['class' => 'form-control', 'required' => 'required']) !!}</td>
                                     <td class="border-left-0"></td>
                                 </tr>
                                 <tr>
-                                    <td class="border-right-0">{{ Form::button('Enregistrer', ['type' => 'submit', 'class' => 'btn btn-primary']) }}</td>
+                                    <td class="border-right-0">{!! Html::button('Enregistrer')->type('submit')->class('btn btn-primary') !!}</td>
                                     <td class="border-right-0 border-left-0"></td>
                                     <td class="border-left-0 border-right-0"></td>
                                     <td class="border-left-0 border-right-0"></td>
                                     <td class="border-left-0"></td>
                                 </tr>
-                            </form>
+                            {!! Html::form()->close() !!}
                             <tr>
                                 <td class="table-active"><b>CONSOMMABLES</b></td>
                                 <td class="table-active">P</td>
@@ -119,5 +123,3 @@
     </body>
 
 @stop
-
-

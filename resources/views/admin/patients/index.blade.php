@@ -29,9 +29,7 @@
                 </form>
                 @if (isset($patients))
                     <div class="table-responsive">
-                        @if(isset($name) && $name)
-                            <p>Results of your reasearch on <strong>{{$name}}</strong></p><br>
-                        @endif
+                        <p>Results of your reasearch on <strong>{{$name}}</strong></p><br>
                         <table id="myTable" class="table table-bordered table-hover" width="100%">
                             <thead>
                             <th>NUMERO</th>
@@ -50,29 +48,31 @@
                                     <td>{{ $patient->prenom }}</td>
                                     <td>{{ $patient->prise_en_charge }}</td>
                                     <td>{{ $patient->date_insertion}}</td>
-                                    <td class="d-flex">
-                                    @can('consulter', \App\Models\Patient::class)
-                                        <a href="{{ route('patients.show', $patient->id) }}" title="consulter le dossier du patient" class="btn btn-primary btn-sm me-1"><i class="fas fa-eye"></i></a>
-
-                                    @endcan
-                                    {{--
-                                    @can('create', \App\Models\Event::class)
-                                    <a href="{{ route('events.index') }}" title="Prendre un rendez-vous" class="btn btn-info btn-sm me-1"><i class="fas fa-calendar-plus"></i></a>
-                                    @endcan
-                                    --}}
-                                    @can('print', \App\Models\Patient::class)
-
-                                            <a class="btn btn-success btn-sm me-1" title="Générer la facture" href="{{ route('consultation.pdf', $patient->id) }}" onClick='if(this.disabled){ return false; } else { this.disabled = true; }'><i class="far fa-plus-square"></i></a>
-                                        </p>
-                                    @endcan
-                                    @can('delete', \App\Models\Patient::class)
-                                        <form action="{{ route('patients.destroy', $patient->id) }}" method="post">
-                                            @csrf @method('DELETE')
-                                            <p data-placement="top" data-toggle="tooltip" title="Delete">
-                                                <button type="submit" class="btn btn-danger btn-sm me-1" title="Supprimer le dossier du patient"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
+                                    <td>
+                                        <div class="d-flex"> 
+                                        @can('consulter', \App\Models\Patient::class)
+                                            <a href="{{ route('patients.show', $patient->id) }}" title="consulter le dossier du patient" class="btn btn-primary btn-sm me-1"><i class="fas fa-eye"></i></a>
+                                            
+                                        @endcan
+                                        {{--
+                                        @can('create', \App\Event::class)
+                                        <a href="{{ route('events.index') }}" title="Prendre un rendez-vous" class="btn btn-info btn-sm me-1"><i class="fas fa-calendar-plus"></i></a>
+                                        @endcan
+                                        --}}
+                                        @can('print', \App\Models\Patient::class)
+                                        
+                                                <a class="btn btn-success btn-sm me-1" title="Générer la facture" href="{{ route('consultation.pdf', $patient->id) }}" onClick='if(this.disabled){ return false; } else { this.disabled = true; }'><i class="far fa-plus-square"></i></a>
                                             </p>
-                                        </form>
-                                    @endcan
+                                        @endcan
+                                        @can('delete', \App\Models\Patient::class)
+                                            <form action="{{ route('patients.destroy', $patient->id) }}" method="post">
+                                                @csrf @method('DELETE')
+                                                <p data-placement="top" data-bs-toggle="tooltip" title="Delete">
+                                                    <button type="submit" class="btn btn-danger btn-sm me-1" title="Supprimer le dossier du patient"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
+                                                </p>
+                                            </form>
+                                        @endcan
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -81,7 +81,7 @@
                         </table>
                         <div class="clearfix"></div>
 
-                        {{ $patients->links() }}
+                        {{--{{ $patients->links() }}--}}
                     </div>
                 @endif
                 </div>

@@ -38,19 +38,19 @@
                                     <td>{{ $role->id }}</td>
                                     <td>{{ $role->name }}</td>
                                     <td>
-                                        <p data-placement="top" data-toggle="tooltip" title="Edit">
+                                        <p data-placement="top" data-bs-toggle="tooltip" title="Edit">
                                             <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></a>
                                         </p>
                                     </td>
                                     {{--<td>--}}
-                                        {{--<p data-placement="top" data-toggle="tooltip" title="Voir">--}}
+                                        {{--<p data-placement="top" data-bs-toggle="tooltip" title="Voir">--}}
                                             {{--<a href="{{ route('roles.show', $role->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>--}}
                                         {{--</p>--}}
                                     {{--</td>--}}
                                     <td>
                                         <form action="{{ route('roles.destroy', $role->id) }}" method="post">
                                             @csrf @method('DELETE')
-                                            <p data-placement="top" data-toggle="tooltip" title="Delete">
+                                            <p data-placement="top" data-bs-toggle="tooltip" title="Delete">
                                                 <button type="submit" class="btn btn-danger btn-sm"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
                                             </p>
                                         </form>

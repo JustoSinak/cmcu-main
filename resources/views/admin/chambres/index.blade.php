@@ -14,13 +14,13 @@
         </div>
         <hr>
         <div class="container">
-            <div class="col-md-12">
+            <div class="col-12">
                 <div class="row">
                     <div class="col-md-4">
                         <a href="{{ url('/admin/chambres/?categorie=VIP') }}" class="btn btn-success">VIP</a>
                         <a href="{{ url('/admin/chambres/?categorie=CLASSIQUE') }}" class="btn btn-primary">CLASSIQUE</a>
                         <a href="{{ url('/admin/chambres/?categorie=BLOC OPERATOIRE') }}" class="btn btn-info">BLOC</a>
-                        <a href="{{ url('/admin/chambres') }}" class="btn btn-info"><i class="fas fa-sync-alt"></i></a>
+                        <a href="{{ url('/admin/chambres') }}" class="btn btn-info"><i class="fas fa-rotate"></i></a>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
             <div class="col-lg-12">
                 <div class="table-responsive">
                     @include('partials.flash')
-                    <i class="table_info">Les montants sont exprimés en <b> FCFA</b></i>
+                    <i class="table_info" ">Les montants sont exprimés en <b> FCFA</b></i>
                     <table id="myTable" class="table table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
@@ -67,7 +67,7 @@
                                             <input type="hidden" name="patient" value="null">
                                             <input type="hidden" name="statut" value="libre">
                                             <input type="hidden" name="jour" value="null">
-                                            <p data-placement="top" data-toggle="tooltip" title="Liberer la chambre">
+                                            <p data-placement="top" data-bs-toggle="tooltip" title="Liberer la chambre">
                                                 <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-minus"></i></button>
                                             </p>
                                         </form>
@@ -97,3 +97,4 @@
     </body>
 
 @endsection
+

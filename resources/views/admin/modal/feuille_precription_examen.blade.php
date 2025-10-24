@@ -5,20 +5,20 @@
 <div class="modal fade" id="ordonanceModal" tabindex="-1" role="dialog" aria-labelledby="ordonanceModal" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="font-size:14px;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span style="font-size:14px;" aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-tabs">
-                    <li><a data-toggle="tab" class="btn btn-primary" href="#menu1">BIOLOGIES</a></li>
-                    <li><a data-toggle="tab" class="btn btn-primary ml-2" href="#menu2">IMAGERIES</a></li>
+                <ul class="nav nav-tabs" style="font-size:14px;">
+                    <li><a data-bs-toggle="tab" class="btn btn-primary" style="font-size:14px;" href="#menu1">BIOLOGIES</a></li>
+                    <li><a data-bs-toggle="tab" class="btn btn-primary ms-2"  href="#menu2">IMAGERIES</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="home" class="tab-pane fade in active">
                     </div>
-                    <form id="menu1" class="tab-pane fade" action="{{ route('prescriptions.store') }}" method="POST" >
+                    <form style="font-size:14px;" id="menu1" class="tab-pane fade" action="{{ route('prescriptions.store') }}" method="POST" >
                         <h3 class="text-center mb-4">BIOLOGIE</h3>
                         @csrf
                         @include('admin.consultations.partials.feuille_examen_biologie')
@@ -27,7 +27,7 @@
                         <button type="submit"class="btn btn-primary btn-md mt-2">Enregistrer</button>
                     </form>
 
-                    <form id="menu2" class="tab-pane fade" action="{{ route('imageries.store') }}" method="post" >
+                    <form style="font-size:14px;" id="menu2" class="tab-pane fade" action="{{ route('imageries.store') }}" method="post" >
                         <h3 class="text-center mb-4">IMAGERIE</h3>
                         @csrf
                         @include('admin.consultations.partials.feuille_examen_imagerie')

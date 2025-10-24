@@ -18,7 +18,7 @@
                 <hr>
                 @include('partials.flash_form')
 
-                <a href="{{ route('facture_devis.index') }}" class="btn btn-success float-right mb-2"
+                <a href="{{ route('facture_devis.index') }}" class="btn btn-success float-end mb-2"
                    title="Retour à la liste des patients">
                     <i class="fas fa-arrow-left"></i> Retour
                 </a>
@@ -26,10 +26,10 @@
                     <div class="card-body">
                         <h5 class="card-title"><b>FACTURATION DEVIS</b></h5>
                         <hr>
-                        <form class="form-group col-md-12" action="{{ route('facture_devis.store') }}" method="POST">
+                        <form class="mb-3 col-md-12" action="{{ route('facture_devis.store') }}" method="POST">
                             @csrf
 
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <div class="row">
                                     <select name="patient_id" id="patient_id" class="form-control col-md-5" required>
                                         <option value="">Nom du patient</option>

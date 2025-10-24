@@ -2,9 +2,9 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">FICHES D'INTERVENTION</h5>
+                <h5 class="modal-title" id="exampleModalLabel" style="font-size:14px;">FICHES D'INTERVENTION</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span style="font-size:14px;" aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -14,7 +14,7 @@
                     <br>
                     <div class="table-responsive">
                         @if(count($fiche_interventions))
-                            <table id="myTable" class="table table-bordred table-striped">
+                            <table id="myTable" class="table table-bordred table-striped" style="font-size:16px;">
                                 <thead>
                                 <th>TYPE D'INTERVENTION</th>
                                 <th>POSITION PATIENT</th>
@@ -33,7 +33,7 @@
                                         <td>{{ $fiche_intervention->date_intervention }}</td>
                                         <td>
                                             <a class="btn btn-success btn-sm" title="Imprimer la fiche d'intervention" href="{{ route('fiche_intervention.pdf', $fiche_intervention->id) }}">
-                                                <i class="fas fa-print"></i>
+                                                <i style="font-size:16px;" class="fas fa-print"></i>
                                             </a>
                                         </td>
                                     </tr>

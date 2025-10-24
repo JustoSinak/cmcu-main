@@ -9,10 +9,10 @@
     @include('partials.header')
     <!--// top-bar -->
     <div class="container">
-        <h1 class="text-center">LISTE DE FICHES DE SATISFACTIONS</h1>
+        <h1 class="text-center ">LISTE DE FICHES DE SATISFACTIONS</h1>
     </div>
     <hr>
-        <div class="col-md-3 offset-md-8 text-center">
+        <div class="col-3 offset-8 text-center">
              <a href="" class=" btn btn-danger " style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>&#xA0;
                 <h2>TOTAL FICHES :</h2>
                 <h1><P>{{ $ficheCount }}</P> </h1>
@@ -57,14 +57,14 @@
                         <td><a href="{{ Route('fiches.show', $fiches->id)}}" class="btn btn-primary"><i class="fas fa-eye"></i></a></td>
                         <td><a href="{{ Route('fiches.edit', $fiches->id)}}" class="btn btn-primary"><i class="far fa-edit"></i></a></td>
                         <td>
-                            <p data-placement="top" data-toggle="tooltip" title="Imprimer">
+                            <p data-placement="top" data-bs-toggle="tooltip" title="Imprimer">
                                 <a class="btn btn-success btn-sm" title="Imprimer" href="{{ route('fiche.pdf', $fiches->id) }}"><i class="fas fa-print"></i></a>
                             </p>
                         </td>
                         <td>
                             <form action="{{ route('fiches.destroy', $fiches->id)}}" method="post">
                                 @csrf @method('DELETE')
-                                <p data-placement="top" data-toggle="tooltip" title="Delete">
+                                <p data-placement="top" data-bs-toggle="tooltip" title="Delete">
                                     <button type="submit" class="btn btn-danger btn-sm"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
                                 </p>
                             </form>

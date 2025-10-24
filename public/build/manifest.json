@@ -1,14 +1,14 @@
 {
-  "_jquery-4pxIZBj_.js": {
-    "file": "assets/jquery-4pxIZBj_.js",
+  "_jquery-DKenW1nw.js": {
+    "file": "assets/jquery-DKenW1nw.js",
+    "name": "jquery"
+  },
+  "_jquery-OYQeOk-R.js": {
+    "file": "assets/jquery-OYQeOk-R.js",
     "name": "jquery",
     "imports": [
       "_jquery-DKenW1nw.js"
     ]
-  },
-  "_jquery-DKenW1nw.js": {
-    "file": "assets/jquery-DKenW1nw.js",
-    "name": "jquery"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
     "file": "assets/fa-brands-400-D1LuMI3I.ttf",
@@ -35,12 +35,12 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
   },
   "resources/assets/js/app.js": {
-    "file": "assets/app-D9K1SELl.js",
+    "file": "assets/app-j1CMkojh.js",
     "name": "app",
     "src": "resources/assets/js/app.js",
     "isEntry": true,
     "imports": [
-      "_jquery-4pxIZBj_.js",
+      "_jquery-OYQeOk-R.js",
       "_jquery-DKenW1nw.js"
     ]
   },
@@ -61,12 +61,12 @@
     ]
   },
   "resources/js/all.js": {
-    "file": "assets/all-DfD1olSt.js",
+    "file": "assets/all-nOsPNMwk.js",
     "name": "all",
     "src": "resources/js/all.js",
     "isEntry": true,
     "imports": [
-      "_jquery-4pxIZBj_.js",
+      "_jquery-OYQeOk-R.js",
       "resources/js/typehead.js",
       "_jquery-DKenW1nw.js"
     ]

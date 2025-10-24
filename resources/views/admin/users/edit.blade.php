@@ -12,92 +12,105 @@
             <h1 class="text-center">MODIFIER UN UTILISATEUR</h1>
             <hr>
 
-            <div class="card" style="width: 50rem; margin-left: 150px;">
+            <div class="card mx-auto" style="max-width: 60rem; margin-left: 160px; ">
                 <div class="card-body">
-                    <small class="text-info" title="Les champs marqués par une étoile rouge sont obligatoire"><i class="fas fa-info-circle"></i></small>
-                    @include('partials.flash_form')
-                    <form class="form-group" action="{{ route('users.update', $user->id) }}" method="POST">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="fas fa-info-circle text-info me-2"></i>
+                        <small class="text-info" title="Les champs marqués par une étoile rouge sont obligatoire">Les champs marqués par une étoile rouge sont obligatoire</small>
+                        @include('partials.flash_form')
+                    </div>
+                    <form class="mb-3" action="{{ route('users.update', $user->id) }}" method="POST">
                         {{method_field('PATCH')}} {{csrf_field()}}
-                        <div class="col-md-12">
+                        <div class="col-12">
 
-                            <div class="row">
-                                <div class="form-group col-md-5">
-                                    <label for="name" class="col-form-label text-md-right">Nom <span class="text-danger">*</span></label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Nom <span class="text-danger">*</span></label>
                                     <input name="name" class="form-control" value="{{ $user->name }}" type="text" placeholder="Nom" required>
                                 </div>
-                                <div class="form-group col-md-5">
-                                    <label for="prenom" class="col-form-label text-md-right">Prénom <span class="text-danger">*</span></label>
+                                <div class=" col-md-6">
+                                    <label for="prenom" class="form-label">Prénom <span class="text-danger">*</span></label>
                                     <input name="prenom" class="form-control" value="{{ $user->prenom }}" type="text" placeholder="Prénom">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <label for="sexe" class="col-form-label text-md-right">Sexe <span class="text-danger">*</span></label>
-                                    <div class="form-group">
-                                        <label class="mx-2 bx-2"><input type="radio" name="sexe" value="Homme"  @if($user->sexe == 'Homme') checked @endif required>Homme</label>
-                                        <label class="mx-2 bx-2"><input type="radio" name="sexe" value="Femme"  @if($user->sexe == 'Femme') checked @endif required>Femme</label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="sexe" class="form-label">Sexe <span class="text-danger">*</span></label>
+                                    <div >
+                                        <div class="form-check form-check-inline me-3">
+                                            <input class="form-check-input" type="radio" name="sexe" id="homme" value="Homme"  @if($user->sexe == 'Homme') checked @endif required>
+                                            <label class="form-check-label" for="homme">Homme</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="sexe" id="femme" value="Femme"  @if($user->sexe == 'Femme') checked @endif required>
+                                            <label class="form-check-label" for="femme">Femme</label>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-5">
-                                    <label for="telephone" class="col-form-label text-md-right">Téléphone <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label for="telephone" class="form-label">Téléphone <span class="text-danger">*</span></label>
                                     <input name="telephone" id="telephone" type="tel" value="{{ $user->telephone }}" class="form-control" placeholder="Téléphone" required>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="form-group col-md-5">
-                                    <label for="lieu_naissance" class="col-form-label text-md-right">Lieu De Naissance <span class="text-danger">*</span></label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="lieu_naissance" class="form-label">Lieu De Naissance <span class="text-danger">*</span></label>
                                     <input name="lieu_naissance" value="{{ $user->lieu_naissance }}" class="form-control" placeholder="Lieu de naissance" required>
                                 </div>
-                                <div class="form-group col-md-5">
-                                    <label for="date_naissance" class="col-form-label text-md-right">Date De Naissance <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label for="date_naissance" class="form-label">Date De Naissance <span class="text-danger">*</span></label>
                                     <input name="date_naissance" type="date" value="{{ $user->date_naissance }}" class="form-control" placeholder="Date de naissance" required>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="form-group col-md-5">
-                                    <label class="col-form-label" for="roles">Rôle <span class="text-danger">*</span></label>
-                                    <select name="roles" class="form-control" id="exampleFormControlSelect1">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="roles">Rôle <span class="text-danger">*</span></label>
+                                    <select name="roles" class="form-select" id="roles">
                                         @foreach($roles as $role)
                                         <option value="{{ $role->id }}" {{ $role->id == $user->role_id ? 'selected' : '' }}>{{ $role->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-5">
-                                    <label for="login" class="col-form-label">Login <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label for="login" class="form-label">Login <span class="text-danger">*</span></label>
                                     <input name="login" class="form-control" value="{{ $user->login }}" type="text" placeholder="Login" required>
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <label for="password" class="col-form-label text-md-right">Nouveau Mot De Passe <span class="text-danger">*</span></label>
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Nouveau Mot De Passe <span class="text-danger">*</span></label>
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="password" class="col-form-label text-md-right">Confirmer Mot De Passe <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Confirmer Mot De Passe <span class="text-danger">*</span></label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md-5">
+                            <div class="row g-3">
+                                <div class="col-md-6">
                                     <input name="password" type="password" class="form-control" id="password" placeholder="Nouveau Mot De Passe" required>
                                 </div>
-                                <div class="form-group col-md-5">
-                                    <input id="confirm_password" type="password" class="form-control" name="password_confirmation" placeholder="Confirmer Mot De Passe" required>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn btn-default" type="button" onclick="show_password()"><i id="show_pass" class="fas fa-eye"></i></button>
-                                </div>
-                                <div class="col-md-1">
-                                    <span id='message' class="ml-1 align-text-bottom"></span>
+                               <div class="col-md-6 position-relative">
+                                    <div class="d-flex">
+                                        <input id="confirm_password" type="password" class="form-control" name="password_confirmation" placeholder="Confirmer Mot De Passe" required>
+                                        <button class="btn btn-outline-secondary ms-2" type="button" onclick="show_password()"><i id="show_pass" class="fas fa-eye"></i></button>
+                                    </div>
+                                    <span id='message' class="d-block mt-1"></span>
                                 </div>
                             </div>
+                            
+                            <hr class="my-4">
 
-
-                            <br>
-                            <button type="submit" class="btn btn-primary btn-lg col-md-5" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>&#xA0;Modifier</button>
-                            <a href="{{ route('users.index') }}" class="btn btn-warning btn-lg col-md-5 offset-md-1" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span>&#xA0;Annuler</a>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="submit" class="w-100 btn btn-primary btn-lg" title="Valider votre enregistrement" value="Ajouter">
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ route('users.index') }}" class="w-100 btn btn-warning btn-lg text-decoration-none d-block text-center pt-2" title="Retour à la liste des utilisateurs">Annuler</a>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>

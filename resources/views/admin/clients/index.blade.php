@@ -41,15 +41,15 @@
                                     <td style="display: inline-flex;">
                                          @can('consulter', \App\Models\Patient::class)
                                    
-                                        <p data-placement="top" data-toggle="tooltip" title="Delete">
-                                            <a class="btn btn-success btn-sm mr-1" title="Générer la facture du client" href="{{ route('clientP.pdf', $client->id) }}" onClick='if(this.disabled){ return false; } else { this.disabled = true; }'><i class="far fa-plus-square"></i></a>
+                                        <p data-placement="top" data-bs-toggle="tooltip" title="Delete">
+                                            <a class="btn btn-success btn-sm me-1" title="Générer la facture du client" href="{{ route('clientP.pdf', $client->id) }}" onClick='if(this.disabled){ return false; } else { this.disabled = true; }'><i class="far fa-plus-square"></i></a>
                                         </p>
                                         @endcan
                                         @can('delete', \App\Models\Patient::class)
                                         <form action="{{ route('clients.destroy', $client->id) }}" method="post">
                                             @csrf @method('DELETE')
-                                            <p data-placement="top" data-toggle="tooltip" title="Delete">
-                                                <button type="submit" class="btn btn-danger btn-sm mr-1" title="Supprimer le dossier du client"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
+                                            <p data-placement="top" data-bs-toggle="tooltip" title="Delete">
+                                                <button type="submit" class="btn btn-danger btn-sm me-1" title="Supprimer le dossier du client"  onclick="return myFunction()"><i class="fas fa-trash-alt"></i></button>
                                             </p>
                                         </form>
                                         @endcan
