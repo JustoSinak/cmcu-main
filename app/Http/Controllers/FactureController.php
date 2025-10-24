@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Image;
+use App\Helpers\PdfHelper;
 
 class FactureController extends Controller
 {
@@ -69,7 +70,7 @@ class FactureController extends Controller
         $endDate1 = Carbon::parse($endDate)->endOfDay();
 
         $end_time = strtotime("+1 month", $start_time);
-        $oneMonthAgo = Carbon::now()->subMonth(8);
+        $oneMonthAgo = Carbon::now()->subMonths(8);
 
         for ($i = $start_time; $i < $end_time; $i += 86400) {
             $lists[] = date('Y-m-d', $i);
@@ -236,31 +237,48 @@ class FactureController extends Controller
          $this->authorize('update', Patient::class);
          $this->authorize('print', Patient::class);
 
-         // Optimize the query by eager loading the patient relationship
-         $facture = FactureConsultation::with('patient')->findOrFail($id);
-         $facturepatient = FactureConsultation::where('id', $id)->pluck('patient_id')->first();
-         $patient = Patient::find($facturepatient);
-         // Load the PDF view with necessary data only
-        //  dd($facturepatient,$patient);
-         $pdf = PDF::loadView('admin.etats.consultation', [
-             'patient' => $patient,
-             'facture' => $facture
-         ]);
+         // Fetch the facture with patient and user relationships
+         $facture = FactureConsultation::with('patient.user')->findOrFail($id);
+         $patient = $facture->patient;
 
+         // Render the view
+         $html = view('admin.etats.consultation', compact('facture', 'patient'))->render();
 
-        // Stream the PDF
-        return $pdf->stream('factures.consultation_pdf');
-        //  return view('admin.factures.consultation', compact('factureConsultations', 'lists'));
+         // Clean UTF-8
+         $html = preg_replace('/^\x{FEFF}/u', '', $html);
+         $html = str_replace("\0", '', $html);
+         $html = mb_convert_encoding($html, 'UTF-8', 'UTF-8');
+         $html = iconv('UTF-8', 'UTF-8//IGNORE', $html);
+         $html = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $html);
+
+         // Generate PDF
+         return PdfHelper::generatePdf($html, 'facture_consultation.pdf', 'portrait', 'A4');
     }
 
     public function export_client($id)
     {
+        $client = FactureClient::with('user')->findOrFail($id);
 
-        $pdf = PDF::loadView('admin.etats.clientP', [
-            'clients' => FactureClient::with('user')->findOrFail($id)
-        ]);
+        $html = view('admin.etats.clientP', [
+            'clients' => $client
+        ])->render();
 
-        return $pdf->stream('factures.client_pdf');
+        // Strip BOM and any bytes before DOCTYPE
+        $html = preg_replace('/^\s*(\x{FEFF})?/u', '', $html);
+        $html = preg_replace('/^\s*/u', '', $html);
+        if (!preg_match('/^\s*<!DOCTYPE\s+html/i', $html)) {
+            $html = "<!DOCTYPE html>\n" . $html;
+        }
+
+        // Normalize UTF-8 and remove invalid bytes
+        $html = str_replace("\0", '', $html);
+        $html = @iconv('UTF-8', 'UTF-8//IGNORE', $html);
+
+        // Log first bytes for binary inspection
+        \Log::info('HTML head hex: ' . bin2hex(substr($html, 0, 8)));
+
+        // Temporarily return the cleaned HTML to browser for inspection
+        return response($html)->header('Content-Type', 'text/html; charset=utf-8');
     }
 
     // public function export_facture_devis($id)
@@ -377,7 +395,7 @@ class FactureController extends Controller
             $totalPartPatient += $tFactures[$key]['partPatient'];
         }
 
-         $pdf = PDF::loadView('admin.etats.bilan_consultation', [
+        $html = view('admin.etats.bilan_consultation', [
             'mode_paiement' => $modePaiement,
             'service' => $service==""? "" : '- '.$service,
             'tFactures' => $tFactures,
@@ -386,16 +404,25 @@ class FactureController extends Controller
             'totalReste' => $totalReste,
             'totalPartAssurance' => $totalPartAssurance,
             'totalPartPatient' => $totalPartPatient,
-        ]);
+        ])->render();
 
-        $pdf->setPaper('A4', 'landscape');
+        // Clean UTF-8
+        $html = preg_replace('/^\x{FEFF}/u', '', $html);
+        $html = str_replace("\0", '', $html);
+        $html = mb_convert_encoding($html, 'UTF-8', 'UTF-8');
+        $html = iconv('UTF-8', 'UTF-8//IGNORE', $html);
+        $html = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $html);
 
-        return $pdf->stream('bilan_facture_consultation.pdf');
-     }
+        return PdfHelper::generatePdf(
+            $html,
+            'bilan_facture_consultation.pdf',
+            'landscape',
+            'A4'
+        );
+    }
 
     public function export_bilan_clientexterne()
     {
-
 
         $factures = FactureClient::with('client')->where('date_insertion', '=', \request('day'))->get();
 
@@ -407,16 +434,23 @@ class FactureController extends Controller
 
 
 
-         $pdf = PDF::loadView('admin.etats.bilan_clientexterne', [
+         $html = view('admin.etats.bilan_clientexterne', [
             'factures' => $factures,
             'totalPercu' => $totalPercu,
             'avances' => $avances,
             'restes' => $restes,
             'assurances' => $assurances,
             'clients' => $clients,
-        ]);
-
+        ])->render();
+        // Clean UTF-8
+        $html = preg_replace('/^\x{FEFF}/u', '', $html);
+        $html = str_replace("\0", '', $html);
+        $html = mb_convert_encoding($html, 'UTF-8', 'UTF-8');
+        $html = iconv('UTF-8', 'UTF-8//IGNORE', $html);
+        $html = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $html);
+        $pdf = PDF::loadHTML($html);
         $pdf->setPaper('A4', 'landscape');
+        
 
         return $pdf->stream('bilan_facture_clientexterne.pdf');
     }

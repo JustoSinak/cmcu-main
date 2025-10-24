@@ -242,7 +242,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Flash' => Laracasts\Flash\Flash::class,
         'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
-        'Html' => Spatie\Html\HtmlFacade::class,
+        // 'Html' => Spatie\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'PDF' => ZanySoft\LaravelPDF\Facades\PDF::class,
 

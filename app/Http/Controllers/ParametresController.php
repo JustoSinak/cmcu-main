@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FicheIntervention;
-use App\Models\Http\Requests\ParametreRequest;
+use App\Http\Requests\ParametreRequest;
 use App\Models\Parametre;
 use App\Models\Patient;
 use App\Models\PrescriptionMedicale;

@@ -4,6 +4,7 @@
     <title>LETTRE DE CONSULTATION {{ $consultations->patient->name.' '.$consultations->patient->prenom }}</title>
     <link href="{{ asset('admin/css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
     <meta charset="utf-8">
+    
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <?php  \Carbon\Carbon::setUTF8(true); setlocale(LC_TIME, 'French') ?>

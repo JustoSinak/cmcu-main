@@ -3,9 +3,11 @@
             <head>
                 <meta charset="utf-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
-                <link href="{{ asset('admin/css/bootstrap3.3.7.css') }}" rel="stylesheet" type="text/css" media="all" />
+                <link href="{{ asset('admin/css/bootstrap5.3.8.css') }}" rel="stylesheet" type="text/css" media="all" />
                 <style>
-                    body { font-size: 7px }
+                    body { font-size: 7px;
+                        font-family: DejaVu Sans, sans-serif;
+                    }
 
                     thead > tr > th {
                         text-align: center;

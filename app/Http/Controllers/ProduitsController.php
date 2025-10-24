@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Facture;
-use App\Models\Http\Requests\ProduitRequest;
+use App\Http\Requests\ProduitRequest;
 use App\Models\Patient;
 use App\Models\Produit;
 // use Barryvdh\DomPDF\Facade as PDF;
@@ -12,7 +12,6 @@ use ZanySoft\LaravelPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 
 class ProduitsController extends Controller
@@ -69,11 +68,12 @@ class ProduitsController extends Controller
 
 
     public function update(ProduitRequest $request, Produit $produit)
+   
     {
         $this->authorize('create', Produit::class);
 
 
-        $input = Input::get('qte_stock');
+        $input = $request->input('qte_stock');
         $nqte = DB::table('produits')->where('qte_stock', $produit->qte_stock)->sum('qte_stock');
 
         $produit->qte_stock = $input + $nqte;
@@ -82,7 +82,6 @@ class ProduitsController extends Controller
 
         return redirect()->route('produits.index')->with('success', 'La mise à jour a bien été éffectuer');
     }
-
 
     public function destroy(Produit $produit)
     {

@@ -20,7 +20,7 @@ class RedirectIfAuthenticated
         if (Auth::guard($guard)->check()) {
             
             $titre = Auth()->user()->role_id==2 ? "DR": (in_array(Auth()->user()->sexe, ["Homme", "Maxculin"])? "M." : "Mme");
-            flashy()->primary('Bievenue '.$titre.' '.Auth()->user()->name.' ! Nous sommes heureux de vous revoir !');
+            flash()->primary('Bievenue '.$titre.' '.Auth()->user()->name.' ! Nous sommes heureux de vous revoir !');
             return redirect('/admin/dashboard');
         }
 

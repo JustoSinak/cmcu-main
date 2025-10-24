@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\Auth;
 
 class Patient extends Model
 {
@@ -56,7 +56,7 @@ class Patient extends Model
 
     public function soins()
     {
-        return $this->hasMany(\App\Models\Soin::class);
+        return $this->hasMany('App\Models\Soin');
     }
 
     public function examens()

@@ -70,7 +70,7 @@ class ClientController extends Controller
         if ($client->assurance){
             if ($client->avance){
                 $client->reste = ($client->partpatient - $client->avance);
-                $client->avance = $client->avance;
+                // $client->avance = $client->avance;
                 $client->partassurance = ((int)$request->get('montant')) - ((int)$client->partpatient);
             }else{
                 $client->reste = 0;

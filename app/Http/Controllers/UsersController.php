@@ -24,7 +24,8 @@ class UsersController extends Controller
         $this->authorize('update', User::class);
 
         $roles = Role::all();
-        return view('admin.users.create')->withRoles($roles);
+        // return view('admin.users.create')->withRoles($roles);
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -70,7 +71,8 @@ class UsersController extends Controller
         $roles = Role::all();
         $user = User::with('roles')->find($id);
 
-        return view("admin.users.edit")->withUser($user)->withRoles($roles);
+        // return view("admin.users.edit")->withUser($user)->withRoles($roles);
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -148,6 +150,7 @@ class UsersController extends Controller
     public function profile(Request $request, $id){
         $user = User::with('roles')->find($id);
 
-        return view("admin.users.profile")->withUser($user);
+        // return view("admin.users.profile")->withUser($user);
+        return view('admin.users.profile', compact('user'));
     }
 }

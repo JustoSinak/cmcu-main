@@ -1,11 +1,11 @@
 ﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Facture de {{ strtolower($patient->details_motif) ?? 'consultation'}}</title>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ asset('admin/css/bootstrap3.3.7.css') }}" rel="stylesheet" type="text/css" media="all" />
-
+    <link href="{{ asset('admin/css/bootstrap5.3.8.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <title>Facture de {{ strtolower($patient->details_motif) ?? 'consultation'}}</title>
     <style>
         body { font-size: 3px }
         thead > tr > th {
