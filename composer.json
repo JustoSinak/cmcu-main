@@ -1,4 +1,3 @@
-
 {
     "name": "2ncorporate/cmcuapp",
     "type": "project",
@@ -21,7 +20,7 @@
         "laravel/scout": "^10.0",
         "laravel/tinker": "^2.8",
         "mpdf/mpdf": "^8.0",
-        "predis/predis": "^2.0",
+        "predis/predis": "^3.2",
         "spatie/laravel-google-calendar": "^3.0",
         "spatie/laravel-html": "^3.5",
         "spatie/laravel-image-optimizer": "^1.7",
@@ -85,3 +84,16 @@
         ]
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

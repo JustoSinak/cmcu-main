@@ -6,6 +6,10 @@ import $ from 'jquery';
 window.$ = window.jQuery = $;
 import 'bootstrap';
 
+// Import Moment.js
+import moment from 'moment';
+window.moment = moment;
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This

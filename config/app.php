@@ -146,7 +146,7 @@ return [
     |
     */
 
-    'providers' => [
+    'providers' => array_merge([
 
         /*
          * Laravel Framework Service Providers...
@@ -174,12 +174,14 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+    ], env('APP_ENV') === 'local' ? [
 
         /*
          * Package Service Providers...
          */
-
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
+    ] : [], [
 
         /*
          * Application Service Providers...
@@ -191,7 +193,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
-    ],
+    ]),
 
     /*
     |--------------------------------------------------------------------------
@@ -239,7 +241,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Debugbar' => env('APP_ENV') === 'local' ? Barryvdh\Debugbar\Facade::class : null,
         'Flash' => Laracasts\Flash\Flash::class,
         'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
         // 'Html' => Spatie\Html\HtmlFacade::class,

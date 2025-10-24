@@ -1,14 +1,18 @@
 {
-  "_jquery-DKenW1nw.js": {
-    "file": "assets/jquery-DKenW1nw.js",
-    "name": "jquery"
+  "_vendor-D0UeKsO_.js": {
+    "file": "assets/vendor-D0UeKsO_.js",
+    "name": "vendor"
   },
-  "_jquery-OYQeOk-R.js": {
-    "file": "assets/jquery-OYQeOk-R.js",
-    "name": "jquery",
+  "_vendor_bootstrap-Dutf5p__.js": {
+    "file": "assets/vendor_bootstrap-Dutf5p__.js",
+    "name": "vendor_bootstrap",
     "imports": [
-      "_jquery-DKenW1nw.js"
+      "_vendor-D0UeKsO_.js"
     ]
+  },
+  "_vendor_vue-ChgFyP-3.js": {
+    "file": "assets/vendor_vue-ChgFyP-3.js",
+    "name": "vendor_vue"
   },
   "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
     "file": "assets/fa-brands-400-D1LuMI3I.ttf",
@@ -35,13 +39,14 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
   },
   "resources/assets/js/app.js": {
-    "file": "assets/app-j1CMkojh.js",
+    "file": "assets/app-LLBeD-xB.js",
     "name": "app",
     "src": "resources/assets/js/app.js",
     "isEntry": true,
     "imports": [
-      "_jquery-OYQeOk-R.js",
-      "_jquery-DKenW1nw.js"
+      "_vendor-D0UeKsO_.js",
+      "_vendor_bootstrap-Dutf5p__.js",
+      "_vendor_vue-ChgFyP-3.js"
     ]
   },
   "resources/assets/sass/app.scss": {
@@ -61,23 +66,22 @@
     ]
   },
   "resources/js/all.js": {
-    "file": "assets/all-nOsPNMwk.js",
+    "file": "assets/all-7W4n2XUM.js",
     "name": "all",
     "src": "resources/js/all.js",
     "isEntry": true,
     "imports": [
-      "_jquery-OYQeOk-R.js",
-      "resources/js/typehead.js",
-      "_jquery-DKenW1nw.js"
+      "_vendor-D0UeKsO_.js",
+      "_vendor_bootstrap-Dutf5p__.js"
     ]
   },
   "resources/js/typehead.js": {
-    "file": "assets/typehead-UhImJAUm.js",
+    "file": "assets/typehead-CIzMkqPC.js",
     "name": "typehead",
     "src": "resources/js/typehead.js",
     "isEntry": true,
     "imports": [
-      "_jquery-DKenW1nw.js"
+      "_vendor-D0UeKsO_.js"
     ]
   }
 }
