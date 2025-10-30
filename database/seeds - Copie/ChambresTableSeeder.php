@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Chambre;
+use App\Models\Chambre;
 
 class ChambresTableSeeder extends Seeder
 {

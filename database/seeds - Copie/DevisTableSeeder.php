@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Devis;
+use App\Models\Devis;
 
 class DevisTableSeeder extends Seeder
 {

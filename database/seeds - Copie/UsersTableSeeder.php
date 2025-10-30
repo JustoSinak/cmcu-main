@@ -433,6 +433,6 @@ class UsersTableSeeder extends Seeder
 
 
 //        $user1 = User::findOrFail(1);
-//        $user1->roles()->attach(\App\Role::where('name', 'ADMINISTRATEUR')->first());
+//        $user1->roles()->attach(\App\Models\Role::where('name', 'ADMINISTRATEUR')->first());
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Fiche;
+use App\Models\Fiche;
 
 class FichesTableSeeder extends Seeder
 {

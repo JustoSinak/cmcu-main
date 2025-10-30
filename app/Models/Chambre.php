@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
 /**
- * App\Chambre
+ * App\Models\Chambre
  *
  * @property int $id
  * @property int $user_id

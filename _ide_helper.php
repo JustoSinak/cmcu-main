@@ -8857,7 +8857,7 @@ namespace Illuminate\Support\Facades {
         public static function create($uri, $method = 'GET', $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)
         {
             //Method inherited from \Symfony\Component\HttpFoundation\Request            
-                        return \Illuminate\Http\Request::create($uri, $method, $parameters, $cookies, $files, $server, $content);
+            return \Illuminate\Http\Request::create($uri, $method, $parameters, $cookies, $files, $server, $content);
         }
         
         /**

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\FactureConsultation;
+use App\Models\FactureConsultation;
 use Illuminate\Database\Eloquent\Model;
 
 class HistoriqueFacture extends Model

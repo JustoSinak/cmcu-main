@@ -55,7 +55,7 @@
                                             
                                         @endcan
                                         {{--
-                                        @can('create', \App\Event::class)
+                                        @can('create', \App\Models\Event::class)
                                         <a href="{{ route('events.index') }}" title="Prendre un rendez-vous" class="btn btn-info btn-sm me-1"><i class="fas fa-calendar-plus"></i></a>
                                         @endcan
                                         --}}
