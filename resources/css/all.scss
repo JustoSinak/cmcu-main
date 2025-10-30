@@ -1,0 +1,17 @@
+@import 'froala-editor/css/froala_editor.pkgd.min.css';
+// // @import 'public/admin/css/login.css';
+
+
+// @import 'public/admin/css/style4.css';
+// @import 'public/admin/css/style.css';
+// @import 'public/admin/css/bar.css';
+// @import 'public/admin/css/widgets.css';
+
+
+
+// Use relative path from resources/css:
+@import "../../public/admin/css/style4.css";
+@import "../../public/admin/css/style.css";
+@import "../../public/admin/css/bar.css";
+@import "../../public/admin/css/widgets.css";
+
