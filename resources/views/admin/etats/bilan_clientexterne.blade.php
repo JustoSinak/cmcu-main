@@ -1,4 +1,4 @@
-<link href="{{ asset('admin/css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
+<link href="{{ public_path('admin/css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
 <style>
     .cpi-titulo3 {
         font-size: 12px;

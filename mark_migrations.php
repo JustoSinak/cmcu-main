@@ -69,6 +69,7 @@ $migrations = [
     '2019_12_20_095751_add_foreign_keys_to_soins_table',
     '2019_12_20_095751_add_foreign_keys_to_user_role_table',
     '2020_02_07_141011_rename_avance_to_percu_on_historique_factures_table',
+    '2025_11_06_000000_comprehensive_database_index_optimization',
     
 ];
 

@@ -173,19 +173,16 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        
+
         /*
          * Package Service Providers...
          */
-
-         ZanySoft\LaravelPDF\PdfServiceProvider::class,
-        //  MaddHatter\LaravelFullcalendar\ServiceProvider::class,
-        // Barryvdh\DomPDF\ServiceProvider::class,
+        ZanySoft\LaravelPDF\PDFServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
-        // MercurySeries\Flashy\FlashyServiceProvider::class,
-        // Unisharp\Ckeditor\ServiceProvider::class,
-        // Collective\Html\HtmlServiceProvider::class,
-        // Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class,
+        Spatie\Html\HtmlServiceProvider::class,
+        Spatie\LaravelImageOptimizer\ImageOptimizerServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -195,8 +192,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Intervention\Image\Laravel\ServiceProvider::class,
-    
+        // Intervention\Image\Laravel\ServiceProvider::class,
+
 
     ],
 
@@ -249,8 +246,8 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Flash' => Laracasts\Flash\Flash::class,
         'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
-        'Html' => Spatie\Html\HtmlFacade::class,
-        'Image' => Intervention\Image\Laravel\Facades\Image::class,
+        'Html' => Spatie\Html\Facades\Html::class,
+        // 'Image' => Intervention\Image\Laravel\Facades\Image::class,
         'PDF' => ZanySoft\LaravelPDF\Facades\PDF::class,
 
     ],

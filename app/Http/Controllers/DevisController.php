@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Patient;
-// use Barryvdh\DomPDF\Facade as PDF;
-use ZanySoft\LaravelPDF\PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
+// use ZanySoft\LaravelPDF\PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Devi;

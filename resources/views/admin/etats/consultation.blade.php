@@ -4,10 +4,11 @@
     <title>Facture de {{ $patient->details_motif ? strtolower($patient->details_motif) : 'consultation'}}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ asset('admin/css/bootstrap3.3.7.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <!-- <link href="{{ public_path('admin/css/bootstrap5.3.8.css') }}" rel="stylesheet" type="text/css" media="all" /> -->
+     <link href="{{ public_path('admin/css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
 
     <style>
-        body { font-size: 3px }
+        body { font-size: 11px }
         thead > tr > th {
             text-align: center;
             padding: 5px;
@@ -177,11 +178,11 @@
 </head>
 <body>
 <div id="watermark">
-            <img src="{{ asset('admin/images/watermake.JPG') }}" height="100%" width="100%" />
+            <img src="{{ public_path('admin/images/watermake.JPG') }}" height="100%" width="100%" />
         </div>
 <div class="container">
     <div class="row text-center">
-        <img class="logo" src="{{ asset('admin/images/logo.jpg') }}" alt="">
+        <img class="logo" src="{{ public_path('admin/images/logo.jpg') }}" alt="">
         <h6><strong>CENTRE MEDICO-CHIRURGICAL D'UROLOGIE</strong></h6>
         <h6>VALLEE MANGA BELL DOUALA-BALI</h6>
         <h6>TEL: (+ 237) 233 423 389 / 674 068 988 / 698 873 945</h6>
@@ -239,10 +240,12 @@
                             @endif
                         </tr>
                     <tr>
-                        <div class="notices">
-                           <H6><div>LA CAISSE:{{ $patient->user ? $patient->user->prenom . ' ' . $patient->user->name : 'N/A' }}</div></H6>
-                           <H6><div class="notice">Douala,{{ $patient->created_at->toFormattedDateString() }}</div></H6>
-                        </div>
+                        <td>
+                            <div class="notices">
+                            <H6><div>LA CAISSE:{{ $patient->user ? $patient->user->prenom . ' ' . $patient->user->name : 'N/A' }}</div></H6>
+                            <H6><div class="notice">Douala,{{ $patient->created_at->toFormattedDateString() }}</div></H6>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                   </table>
@@ -311,10 +314,12 @@
                             @endif
                          </tr>
                         <tr>
-                            <div class="notices">
-                                <H6><div>LA CAISSE: {{ $patient->user ? $patient->user->prenom . ' ' . $patient->user->name : 'N/A' }}</div></H6>
-                                <H6><div class="notice">Douala,{{ $patient->created_at->toFormattedDateString() }}</div></H6>
-                            </div>
+                            <td>
+                                <div class="notices">
+                                    <H6><div>LA CAISSE: {{ $patient->user ? $patient->user->prenom . ' ' . $patient->user->name : 'N/A' }}</div></H6>
+                                    <H6><div class="notice">Douala,{{ $patient->created_at->toFormattedDateString() }}</div></H6>
+                                </div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Patient;
 use App\Http\Requests\ImagRequest;
-use Intervention\Image\Facades\Image;
+// use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;

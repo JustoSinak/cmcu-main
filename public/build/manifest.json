@@ -9,7 +9,6 @@
     "isEntry": true,
     "name": "app",
     "names": [
-      "app.css",
       "app.css"
     ]
   },
@@ -32,7 +31,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "js/app-DVT7RzOW.js",
+    "file": "js/app-O3hqowOE.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

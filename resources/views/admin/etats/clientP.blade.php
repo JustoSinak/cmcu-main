@@ -4,7 +4,8 @@
     <title>Bootstrap Example</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{{ asset('admin/css/bootstrap3.3.7.css') }}" rel="stylesheet" type="text/css" media="all" />
+    <!-- <link href="{{ public_path('admin/css/bootstrap5.3.8.css') }}" rel="stylesheet" type="text/css" media="all" /> -->
+    <link href="{{ public_path('admin/css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
     <style>
         body { font-size: 3px }
         thead > tr > th {

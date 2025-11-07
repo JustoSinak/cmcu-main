@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Fiche;
-use ZanySoft\LaravelPDF\PDF;
+// use ZanySoft\LaravelPDF\PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
 
 
 class FichesController extends Controller

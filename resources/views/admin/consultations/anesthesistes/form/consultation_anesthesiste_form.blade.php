@@ -1,7 +1,7 @@
 @if($consultation_anesthesiste->id)
-    {{ Form::model($consultation_anesthesiste, ['route' => ['consultation_anesthesiste.update', $consultation_anesthesiste->id], 'method' => 'put', 'class'=>'form-horizontal form-label-left']) }}
+    {{ Html::model($consultation_anesthesiste, ['route' => ['consultation_anesthesiste.update', $consultation_anesthesiste->id], 'method' => 'put', 'class'=>'form-horizontal form-label-left']) }}
 @else
-    {{ Form::open(['route' => 'consultation_anesthesiste.store', 'method' => 'post', 'class'=>'form-horizontal form-label-left']) }}
+    {{ Html::open(['route' => 'consultation_anesthesiste.store', 'method' => 'post', 'class'=>'form-horizontal form-label-left']) }}
 @endif
 @csrf
 <tr>
@@ -11,28 +11,28 @@
     <td></td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Specialité :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::text('specialite', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Specialité :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::text('specialite', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Médecin traitant :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::text('medecin_traitant', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Médecin traitant :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::text('medecin_traitant', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Opérateur :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::text('operateur', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Opérateur :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::text('operateur', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Date d\'intervention :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::date('date_intervention', null, ['class' => 'form-control col-md-6', 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Date d\'intervention :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::date('date_intervention', null, ['class' => 'form-control col-md-6', 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Motif d\'admission :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::text('motif_admission', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Motif d\'admission :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::text('motif_admission', null, ['class' => 'form-control', 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Mémo :') }}</b> </td>
-    <td>{{ Form::textarea('memo', null, ['class' => 'form-control splitLines', 'rows' => 4]) }}</td>
+    <td><b>{{ Html::label('Mémo :') }}</b> </td>
+    <td>{{ Html::textarea('memo', null, ['class' => 'form-control splitLines', 'rows' => 4]) }}</td>
 </tr>
 <tr>
     <td><b>Anesthésie en salle d'opération :</b> <span class="text-danger">*</span></td>
@@ -51,55 +51,55 @@
     </td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Date d\'hospitalisation :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::date('date_hospitalisation', null, ['class' => 'form-control col-md-6']) }}</td>
+    <td><b>{{ Html::label('Date d\'hospitalisation :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::date('date_hospitalisation', null, ['class' => 'form-control col-md-6']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Service :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::text('service', null, ['class' => 'form-control', 'placeholder' => "Ex: Urologie", 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Service :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::text('service', null, ['class' => 'form-control', 'placeholder' => "Ex: Urologie", 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Classe ASA :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::text('classe_asa', null, ['class' => 'form-control', 'placeholder' => "Classe ASA", 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Classe ASA :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::text('classe_asa', null, ['class' => 'form-control', 'placeholder' => "Classe ASA", 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Antécédents / Traitements :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::textarea('antecedent_traitement', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Antécédents / Traitements :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::textarea('antecedent_traitement', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Examens cliniques :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::textarea('examen_clinique', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Examens cliniques :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::textarea('examen_clinique', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Allergies :') }}</b> </td>
-    <td>{{ Form::textarea('allergie', null, ['class' => 'form-control splitLines', 'rows' => 5]) }}</td>
+    <td><b>{{ Html::label('Allergies :') }}</b> </td>
+    <td>{{ Html::textarea('allergie', null, ['class' => 'form-control splitLines', 'rows' => 5]) }}</td>
 </tr>
 <tr>
     <td></td>
     <td>
-        <b>{{ Form::label('Intubation :') }}</b>
-        {{ Form::text('intubation', null, ['class' => 'form-control']) }}
+        <b>{{ Html::label('Intubation :') }}</b>
+        {{ Html::text('intubation', null, ['class' => 'form-control']) }}
 
-        <b>{{ Form::label('Mallampati :') }}</b>
-        {{ Form::text('mallampati', null, ['class' => 'form-control']) }}
+        <b>{{ Html::label('Mallampati :') }}</b>
+        {{ Html::text('mallampati', null, ['class' => 'form-control']) }}
 
-        <b>{{ Form::label('Distance-interincisive :') }}</b>
-        {{ Form::text('distance_interincisive', null, ['class' => 'form-control']) }}
+        <b>{{ Html::label('Distance-interincisive :') }}</b>
+        {{ Html::text('distance_interincisive', null, ['class' => 'form-control']) }}
 
-        <b>{{ Form::label('Distance thyromentonière :') }}</b>
-        {{ Form::text('distance_thyromentoniere', null, ['class' => 'form-control']) }}
+        <b>{{ Html::label('Distance thyromentonière :') }}</b>
+        {{ Html::text('distance_thyromentoniere', null, ['class' => 'form-control']) }}
 
-        <b>{{ Form::label('Mobilité cervicale :') }}</b>
-    {{ Form::text('mobilite_servicale', null, ['class' => 'form-control']) }}
+        <b>{{ Html::label('Mobilité cervicale :') }}</b>
+    {{ Html::text('mobilite_servicale', null, ['class' => 'form-control']) }}
     <td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Traitement en cours :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::textarea('traitement_en_cours', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Traitement en cours :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::textarea('traitement_en_cours', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
 </tr>
 <tr>
-    <td><b>{{ Form::label('Rique(s) :') }}</b> <span class="text-danger">*</span></td>
-    <td>{{ Form::textarea('risque', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
+    <td><b>{{ Html::label('Rique(s) :') }}</b> <span class="text-danger">*</span></td>
+    <td>{{ Html::textarea('risque', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}</td>
 </tr>
 <tr>
     <td>
@@ -110,25 +110,25 @@
 <tr>
     <td><b>Informations données au patient :</b> </td>
     <td>
-        <b>{{ Form::label('Technique d\'anesthésie :') }}</b> <span class="text-danger">*</span>
-        {{ Form::text('technique_anesthesie1', null, ['class' => 'form-control', 'required' => 'required']) }}
+        <b>{{ Html::label('Technique d\'anesthésie :') }}</b> <span class="text-danger">*</span>
+        {{ Html::text('technique_anesthesie1', null, ['class' => 'form-control', 'required' => 'required']) }}
 
-        <b>{{ Form::label('Bénéfice / Risque :') }}</b> <span class="text-danger">*</span>
-        {{ Form::textarea('benefice_risque', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}
+        <b>{{ Html::label('Bénéfice / Risque :') }}</b> <span class="text-danger">*</span>
+        {{ Html::textarea('benefice_risque', null, ['class' => 'form-control splitLines', 'rows' => 5, 'required' => 'required']) }}
 
-        <b>{{ Form::label('Jeune préopératoire :') }}</b> <span class="text-danger">*</span>
+        <b>{{ Html::label('Jeune préopératoire :') }}</b> <span class="text-danger">*</span>
         <div class="form-check">
-            <p>Solides : {{ Form::text('solide', null, ['class' => 'offset-2 mb-1 ml-10', 'placeholder' => ' H-']) }}</p>
+            <p>Solides : {{ Html::text('solide', null, ['class' => 'offset-2 mb-1 ml-10', 'placeholder' => ' H-']) }}</p>
         </div>
         <div class="form-check">
-            <p>Liquides clairs : {{ Form::text('liquide', null, ['class' => 'offset-1 ml-4', 'placeholder' => ' H-']) }}</p>
+            <p>Liquides clairs : {{ Html::text('liquide', null, ['class' => 'offset-1 ml-4', 'placeholder' => ' H-']) }}</p>
         </div>
 
-        <b>{{ Form::label('Adaptation au traitement personnel :') }}</b>
-        {{ Form::textarea('adaptation_traitement', null, ['class' => 'form-control splitLines', 'rows' => 3]) }}
+        <b>{{ Html::label('Adaptation au traitement personnel :') }}</b>
+        {{ Html::textarea('adaptation_traitement', null, ['class' => 'form-control splitLines', 'rows' => 3]) }}
 
-        <b>{{ Form::label('Autre :') }}</b>
-        {{ Form::textarea('autre1', null, ['class' => 'form-control splitLines', 'rows' => 3]) }}
+        <b>{{ Html::label('Autre :') }}</b>
+        {{ Html::textarea('autre1', null, ['class' => 'form-control splitLines', 'rows' => 3]) }}
     </td>
 </tr>
 <tr>
@@ -158,12 +158,12 @@
 </tr>
 <tr>
     <td><b>Antibioprophylaxie :</b> </td>
-    <td>{{ Form::text('antibiotique', null, ['class' => 'form-control']) }}</td>
+    <td>{{ Html::text('antibiotique', null, ['class' => 'form-control']) }}</td>
 </tr>
 <tr>
     <td><b>Synthèse pré-opératoire :</b> <span class="text-danger">*</span></td>
     <td>
-        {{ Form::textarea('synthese_preop', null, ['class' => 'form-control splitLines', 'rows' => 3, 'required' => 'required']) }}
+        {{ Html::textarea('synthese_preop', null, ['class' => 'form-control splitLines', 'rows' => 3, 'required' => 'required']) }}
     </td>
 </tr>
 <tr>
@@ -207,7 +207,7 @@
         @endif
 
         <label for="autre">Autres :</label>
-        {{ Form::text('examen_paraclinique[]', null, ['class' => 'form-control']) }}
+        {{ Html::text('examen_paraclinique[]', null, ['class' => 'form-control']) }}
     </td>
 </tr>
 <tr>
@@ -219,4 +219,4 @@
     </td>
     <td></td>
 </tr>
-{{ Form::close() }}
+{{ Html::close() }}

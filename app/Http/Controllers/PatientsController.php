@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Laracasts\Flash\Flash;
-use ZanySoft\LaravelPDF\PDF;
+// use ZanySoft\LaravelPDF\PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
 
 
 class PatientsController extends Controller

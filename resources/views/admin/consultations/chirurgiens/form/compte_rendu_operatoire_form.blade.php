@@ -1,7 +1,7 @@
 @if($compteRenduBlocOperatoire->id)
-    {{ Form::model($compteRenduBlocOperatoire, ['route' => ['compte_rendu_bloc.update', $compteRenduBlocOperatoire->id], 'method' => 'put', 'class'=>'form-horizontal form-label-left']) }}
+    {{ Html::model($compteRenduBlocOperatoire, ['route' => ['compte_rendu_bloc.update', $compteRenduBlocOperatoire->id], 'method' => 'put', 'class'=>'form-horizontal form-label-left']) }}
 @else
-    {{ Form::open(['route' => 'compte_rendu_bloc.store', 'method' => 'post', 'class'=>'form-horizontal form-label-left']) }}
+    {{ Html::open(['route' => 'compte_rendu_bloc.store', 'method' => 'post', 'class'=>'form-horizontal form-label-left']) }}
 @endif
 @csrf
 
@@ -23,10 +23,10 @@
     </tr>
     <tr>
         <td>
-            {{ Form::date('date_e', null, ['class' => 'form-control', 'required' => 'required']) }}
+            {{ Html::date('date_e', null, ['class' => 'form-control', 'required' => 'required']) }}
         </td>
         <td>
-            {{ Form::select('type_e', ['Urgence' => 'Urgence', 'Hospitalisation' => 'Hospitalisation', 'Ambulatoire' => 'Ambulatoire'], null, ['class' => 'form-control col-md-6', 'placeholder' => 'Motif d\'entrée', 'required' => 'required']) }}
+            {{ Html::select('type_e', ['Urgence' => 'Urgence', 'Hospitalisation' => 'Hospitalisation', 'Ambulatoire' => 'Ambulatoire'], null, ['class' => 'form-control col-md-6', 'placeholder' => 'Motif d\'entrée', 'required' => 'required']) }}
         </td>
     </tr>
     <tr>
@@ -41,10 +41,10 @@
     </tr>
     <tr>
         <td>
-            {{ Form::date('date_s', null, ['class' => 'form-control', 'required' => 'required']) }}
+            {{ Html::date('date_s', null, ['class' => 'form-control', 'required' => 'required']) }}
         </td>
         <td>
-            {{ Form::select('type_s', ['Retour au domicile' => 'Retour au domicile', 'Transfert' => 'Transfert', 'Convalescence' => 'Convalescence', 'Décédé' => 'Décédé' ], null, ['class' => 'form-control col-md-6', 'placeholder' => 'Motif de sortie', 'required' => 'required']) }}
+            {{ Html::select('type_s', ['Retour au domicile' => 'Retour au domicile', 'Transfert' => 'Transfert', 'Convalescence' => 'Convalescence', 'Décédé' => 'Décédé' ], null, ['class' => 'form-control col-md-6', 'placeholder' => 'Motif de sortie', 'required' => 'required']) }}
         </td>
     </tr>
     <tr>
@@ -114,61 +114,61 @@
     </tr>
     <tr>
         <td><b>Titre de l'intervention</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::text('titre_intervention', null, ['class' => 'form-control', 'placeholder' => 'Tire de l\'intervention', 'required' => 'required']) }}</td>
+        <td>{{ Html::text('titre_intervention', null, ['class' => 'form-control', 'placeholder' => 'Tire de l\'intervention', 'required' => 'required']) }}</td>
     </tr>
     <tr>
         <td><b>Type d'intervention</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::text('type_intervention', null, ['class' => 'form-control', 'placeholder' => 'Type\'intervention', 'required' => 'required']) }}</td>
+        <td>{{ Html::text('type_intervention', null, ['class' => 'form-control', 'placeholder' => 'Type\'intervention', 'required' => 'required']) }}</td>
     </tr>
     <tr>
         <td><b>Date de l'inervention :</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::date('date_intervention', null, ['class' => 'form-control col-md-5', 'required' => 'required']) }}</td>
+        <td>{{ Html::date('date_intervention', null, ['class' => 'form-control col-md-5', 'required' => 'required']) }}</td>
     </tr>
     <tr>
         <td><b>Durée de l'inervention :</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::time('dure_intervention', null, ['class' => 'form-control col-md-5', 'required' => 'required']) }}</td>
+        <td>{{ Html::time('dure_intervention', null, ['class' => 'form-control col-md-5', 'required' => 'required']) }}</td>
     </tr>
     <tr>
         <td><b>Indications opératoires :</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::textarea('indication_operatoire', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
+        <td>{{ Html::textarea('indication_operatoire', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
     </tr>
     <tr>
         <td><b>Compte-rendu opératoire :</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::textarea('compte_rendu_o', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
+        <td>{{ Html::textarea('compte_rendu_o', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
     </tr>
 
     <tr>
         <td><b>Résultats histo-pathologiques :</b></td>
-        <td>{{ Form::textarea('resultat_histo', null, ['class' => 'form-control splitLines', 'rows' => '4']) }}</td>
+        <td>{{ Html::textarea('resultat_histo', null, ['class' => 'form-control splitLines', 'rows' => '4']) }}</td>
     </tr>
     <tr>
         <td><b>Suites opératoires:</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::textarea('suite_operatoire', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
+        <td>{{ Html::textarea('suite_operatoire', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
     </tr>
     <tr>
         <td><b>Traitement proposé :</b></td>
-        <td>{{ Form::textarea('traitement_propose', null, ['class' => 'form-control splitLines', 'rows' => '4']) }}</td>
+        <td>{{ Html::textarea('traitement_propose', null, ['class' => 'form-control splitLines', 'rows' => '4']) }}</td>
     </tr>
     <tr>
         <td><b>Soins et examens à réaliser :</b></td>
-        <td>{{ Form::textarea('soins', null, ['class' => 'form-control splitLines', 'rows' => '4']) }}</td>
+        <td>{{ Html::textarea('soins', null, ['class' => 'form-control splitLines', 'rows' => '4']) }}</td>
     </tr>
     <tr>
         <td><b>Proposition de suivi :</b></td>
-        <td>{{ Form::textarea('proposition_suivi', null, ['class' => 'form-control splitLines', 'rows' => '3']) }}</td>
+        <td>{{ Html::textarea('proposition_suivi', null, ['class' => 'form-control splitLines', 'rows' => '3']) }}</td>
     </tr>
     <tr>
         <td><b>Conclusions :</b> <span class="text-danger">*</span></td>
-        <td>{{ Form::textarea('conclusion', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
+        <td>{{ Html::textarea('conclusion', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
     </tr>
     <tr>
-        {{ Form::hidden('patient_id', $patient->id) }}
+        {{ Html::hidden('patient_id', $patient->id) }}
     </tr>
     <tr>
         <td>
-            {{ Form::button('Enregistrer', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
+            {{ Html::button('Enregistrer', ['type' => 'submit', 'class' => 'btn btn-primary']) }}
         </td>
         <td></td>
     </tr>
-{{ Form::close() }}
+{{ Html::close() }}
 

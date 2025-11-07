@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-// use ZanySoft\LaravelPDF\Facades\PDF;
-use ZanySoft\LaravelPDF\PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
+// use ZanySoft\LaravelPDF\PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 

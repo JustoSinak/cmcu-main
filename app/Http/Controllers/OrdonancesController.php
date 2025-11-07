@@ -7,8 +7,8 @@ use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-// use Barryvdh\DomPDF\Facade as PDF;
-use ZanySoft\LaravelPDF\PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
+// use ZanySoft\LaravelPDF\PDF;
 
 class OrdonancesController extends Controller
 {

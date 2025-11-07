@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Facture;
 use App\Models\FactureChambre;
 use App\Models\FactureDevi;
-// use ZanySoft\LaravelPDF\Facades\PDF;
-use ZanySoft\LaravelPDF\PDF;
+use ZanySoft\LaravelPDF\Facades\PDF;
+// use ZanySoft\LaravelPDF\PDF;
 use App\Models\FactureConsultation;
 use App\Models\FactureClient;
 use App\Models\HistoriqueFacture;
@@ -467,6 +467,11 @@ class FactureController extends Controller
         return $pdf->stream('bilan_facture_clientexterne.pdf');
     }
 }
+
+
+
+
+
 
 
 
