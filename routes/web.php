@@ -80,7 +80,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth'] ], function () {
     Route::get('ordonance/{ordonance}','PatientsController@export_ordonance')->name('ordonance.pdf');
     Route::post('bilan-consultation','FactureController@export_bilan_consultation')->name('bilan_consultation.pdf');
 
-    //Route::post('patients/upload-image/{patientId}', 'PatientController@fileStore')->name('patients.upload');
+    // Route::post('patients/upload-image/{patientId}', 'PatientController@fileStore')->name('patients.upload');
     //Route::post('patients/delete-image', 'Patient@fileDestroy')->name('patients.deleteImage');
 
    

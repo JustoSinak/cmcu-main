@@ -86,6 +86,7 @@
 <tr>
     <td><b>Proposition thérapeutique :</b> <span class="text-danger">*</span></td>
     <td>{{ Html::textarea('proposition_therapeutique', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td>
+    
     <!-- <td>{{ Html::textarea('proposition_therapeutique', null, ['class' => 'form-control splitLines', 'rows' => '4', 'required' => 'required']) }}</td> -->
 </tr>
 <tr>

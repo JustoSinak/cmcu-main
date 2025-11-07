@@ -33,7 +33,7 @@ class FactureController extends Controller
         $cacheKey = "factures.index.{$page}.{$perPage}";
 
         $factures = Cache::tags(['factures'])->remember($cacheKey, 600, function () use ($perPage) {
-            return Facture::select('id', 'numero', 'patient', 'prix_total', 'created_at')
+            return Facture::select(['id', 'numero', 'patient', 'prix_total', 'created_at'])
                 ->latest()
                 ->paginate($perPage);
         });
