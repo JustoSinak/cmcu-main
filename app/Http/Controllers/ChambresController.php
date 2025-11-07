@@ -6,33 +6,33 @@ use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Models\Chambre;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ChambresController extends Controller
 {
 
     public function index()
     {
-        $chambres = new Chambre;
+        $query = Chambre::query();
 
-        if (\request()->has('categorie')){
-
-            $chambres = $chambres->where('categorie', request('categorie'));
+        if (request()->has('categorie')) {
+            $query->where('categorie', request('categorie'));
         }
 
-        if (\request()->has('order')) {
-
-            $chambres = $chambres->orderBy('id', \request('order'));
+        if (request()->has('order')) {
+            $query->orderBy('id', request('order'));
         }
 
-        $chambres = $chambres->paginate(100)->appends([
+        // Use select to reduce data retrieval
+        $chambres = $query->select('id', 'numero', 'categorie', 'prix', 'statut', 'patient')
+            ->paginate(50)
+            ->appends([
+                'categorie' => request('categorie'),
+                'order' => request('order'),
+            ]);
 
-            'categorie' => \request('categorie'),
-            'order' => \request('order'),
-        ]);
-
-        return view('admin.chambres.index',compact('chambres'));
+        return view('admin.chambres.index', compact('chambres'));
     }
-
 
     public function create()
     {
@@ -61,8 +61,15 @@ class ChambresController extends Controller
 
     public function attribute($id)
     {
-        $chambre = Chambre::find($id);
-        $patients = Patient::all();
+        $chambre = Chambre::select(['id', 'numero', 'categorie', 'prix', 'statut'])
+            ->findOrFail($id);
+        
+        // Cache patient list
+        $patients = Cache::remember('patients_for_chambers', 600, function () {
+            return Patient::select('id', 'name', 'prenom', 'numero_dossier')
+                ->orderBy('name')
+                ->get();
+        });
 
         return view('admin.chambres.attribute', compact('chambre', 'patients'));
     }
@@ -96,16 +103,16 @@ class ChambresController extends Controller
         return redirect()->route('chambres.index')->with('success', 'La mise à jour a bien été éffectuer');
     }
 
+  
     public function updateStatus(Request $request, Chambre $chambre)
     {
-        $chambre->update($request->only(
-            [
-                'patient',
-                'statut',
-                'jour'
-            ]));
+        $chambre->update($request->only(['patient', 'statut', 'jour']));
+        
+        // Clear cache
+        Cache::forget('chambres_list');
 
-        return redirect()->route('chambres.index')->with('success', 'La chambre a bien été attribué');
+        return redirect()->route('chambres.index')
+            ->with('success', 'La chambre a bien été attribuée');
     }
 
     public function updateMinus(Request $request, Chambre $chambre, Patient $patient)
@@ -121,3 +128,8 @@ class ChambresController extends Controller
     }
 
 }
+
+
+
+
+

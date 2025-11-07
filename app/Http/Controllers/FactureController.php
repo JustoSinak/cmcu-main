@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Facture;
 use App\Models\FactureChambre;
 use App\Models\FactureDevi;
-// use Barryvdh\DomPDF\Facade as PDF;
-use ZanySoft\LaravelPDF\Facades\PDF;
-
+// use ZanySoft\LaravelPDF\Facades\PDF;
+use ZanySoft\LaravelPDF\PDF;
 use App\Models\FactureConsultation;
 use App\Models\FactureClient;
 use App\Models\HistoriqueFacture;
@@ -16,11 +15,11 @@ use App\Models\Patient;
 use App\Models\Produit;
 use App\Models\User;
 use Carbon\Carbon;
-use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Image;
+use Illuminate\Support\Facades\Cache;
 
 class FactureController extends Controller
 {
@@ -28,7 +27,16 @@ class FactureController extends Controller
     public function index(Request $request)
     {
         $this->authorize('view', User::class);
-        $factures = Facture::paginate(100);
+        $perPage = (int) $request->input('per_page', 50);
+        $page = (int) $request->input('page', 1);
+
+        $cacheKey = "factures.index.{$page}.{$perPage}";
+
+        $factures = Cache::tags(['factures'])->remember($cacheKey, 600, function () use ($perPage) {
+            return Facture::select('id', 'numero', 'patient', 'prix_total', 'created_at')
+                ->latest()
+                ->paginate($perPage);
+        });
 
         return view('admin.factures.index', compact('factures'));
     }
@@ -37,54 +45,73 @@ class FactureController extends Controller
     {
         $this->authorize('view', User::class);
         $facture = FactureConsultation::findOrFail($id);
-        $facture->delete();
+
+        DB::transaction(function () use ($facture) {
+            $facture->delete();
+        });
+
+        Cache::tags(['factures'])->flush();
         return redirect()->action('FactureController@FactureConsultation')->with('info', 'La facture n° '.$id.' à bien été supprimée');
     }
 
     public function show(Facture $facture, Produit $produit)
     {
-        $factures = Facture::find($facture);
-
         return view('admin.factures.show', [
             'facture' => $facture
         ]);
     }
 
-    public function FactureConsultation(Patient $patient, User $user,Request $request)
+    // public function FactureConsultation(Patient $patient, User $user,Request $request)
+    public function FactureConsultation(Request $request)
     {
         $this->authorize('view', User::class);
 
- // Validate the request
+        $startDate = $request->input('start-date') 
+            ? Carbon::parse($request->input('start-date'))->startOfDay() 
+            : Carbon::now()->startOfMonth();
+        
+        $endDate = $request->input('end-date') 
+            ? Carbon::parse($request->input('end-date'))->endOfDay() 
+            : Carbon::now()->endOfMonth();
 
-
-        $month = Carbon::now()->month;
-        $year = Carbon::now()->year;
-
-        $start_date = "01-" . $month . "-" . $year;
-        $start_time = strtotime($start_date);
-
-        $startDate= $request->input('start-date');
-        $startDate1 = Carbon::parse($startDate)->startOfDay();
-        $endDate= $request->input('end-date');
-        $endDate1 = Carbon::parse($endDate)->endOfDay();
-
-        $end_time = strtotime("+1 month", $start_time);
-        $oneMonthAgo = Carbon::now()->subMonth(8);
-
-        for ($i = $start_time; $i < $end_time; $i += 86400) {
-            $lists[] = date('Y-m-d', $i);
+        // Generate date list for the date selector
+        $lists = [];
+        $currentDate = Carbon::now()->subMonths(3); // Start from 3 months ago
+        while ($currentDate <= Carbon::now()) {
+            $lists[] = $currentDate->format('Y-m-d');
+            $currentDate->addDay();
         }
+        $lists = array_reverse($lists); // Most recent dates first
 
-        $user = User::where('role_id', '=', 2)->get();
-        $factureConsultations = FactureConsultation::with('patient', 'user')
-        ->whereBetween('created_at', [$startDate1, $endDate1])
-        ->latest()
-        ->paginate(100);
+        // Optimize query with specific columns and eager loading
+        $perPage = (int) $request->input('per_page', 50);
 
+        $factureConsultations = FactureConsultation::with([
+                'patient:id,name,prenom,numero_dossier',
+                'user:id,name'
+            ])
+            ->select([
+                'id', 'numero', 'patient_id', 'user_id', 'montant', 
+                'avance', 'reste', 'statut', 'motif', 'created_at',
+                'assurec', 'assurancec', 'mode_paiement', 'mode_paiement_info_sup',
+                'details_motif', 'medecin_r', 'demarcheur'
+            ])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->latest()
+            ->paginate($perPage);
 
+        // Cache user list
+        $users = Cache::remember('medecins_list', 3600, function () {
+            return User::where('role_id', 2)->select('id', 'name')->get();
+        });
 
-
-        return view('admin.factures.consultation', compact('factureConsultations', 'lists','startDate','endDate'));
+        return view('admin.factures.consultation', compact(
+            'factureConsultations', 
+            'startDate', 
+            'endDate',
+            'users',
+            'lists'
+        ));
     }
 
     public function FactureConsultationUpdate( Request $request, $id){
@@ -101,33 +128,43 @@ class FactureController extends Controller
             'percu' => 'required|numeric|lte:reste',
         ]);
 
-        $facture = FactureConsultation::findOrFail($id);
-        //
-        if ($request->get('mode_paiement') === "chèque") {
-            $mode_paiement_info_sup = $request->get('num_cheque')." // ".$request->get('emetteur_cheque')." // ".$request->get('banque_cheque');
-        } else {
-            $mode_paiement_info_sup = ($request->get('mode_paiement') === "bon de prise en charge") ? $request->get('emetteur_bpc'): "" ;
-        }
+        $facture = FactureConsultation::with('patient:id,prise_en_charge')->findOrFail($id);
 
-        $historiqueFacture = new HistoriqueFacture([
-                    'reste' => $facture->reste - $request->get('percu'),
-                    'montant' => $facture->montant,
-                    'percu'   => $request->get('percu'),
-                    'assurec'  => $facture->assurec,
-                    'mode_paiement'  => $request->get('mode_paiement'),
-                    'mode_paiement_info_sup' => $mode_paiement_info_sup,//
-                ]);
+        $modePaiementInfo = $request->input('mode_paiement') === 'chèque'
+            ? collect([
+                $request->input('num_cheque'),
+                $request->input('emetteur_cheque'),
+                $request->input('banque_cheque')
+            ])->filter()->implode(' // ')
+            : ($request->input('mode_paiement') === 'bon de prise en charge'
+                ? $request->input('emetteur_bpc')
+                : '');
 
-        $facture->montant = $request->get('montant');
-        $facture->avance += $request->get('percu');
-        $facture->mode_paiement = $request->get('mode_paiement');
-        $facture->mode_paiement_info_sup = $mode_paiement_info_sup;//
-        $facture->assurec = FactureConsultation::calculAssurec($request->get('montant'), $facture->patient->prise_en_charge);
-        $facture->assurancec = FactureConsultation::calculAssuranceC($request->get('montant'), $facture->patient->prise_en_charge);
-        $facture->reste = FactureConsultation::calculReste($facture->assurec, $facture->avance);
-        $facture->statut = $facture->reste == 0 ? 'Soldée' : 'Non soldée';
-        $facture->save();
-        $facture->historiques()->save($historiqueFacture);
+        DB::transaction(function () use ($facture, $request, $modePaiementInfo) {
+            $historiqueFacture = new HistoriqueFacture([
+                'reste' => $facture->reste - $request->input('percu'),
+                'montant' => $facture->montant,
+                'percu'   => $request->input('percu'),
+                'assurec'  => $facture->assurec,
+                'mode_paiement'  => $request->input('mode_paiement'),
+                'mode_paiement_info_sup' => $modePaiementInfo,
+            ]);
+
+            $facture->montant = $request->input('montant');
+            $facture->avance += $request->input('percu');
+            $facture->mode_paiement = $request->input('mode_paiement');
+            $facture->mode_paiement_info_sup = $modePaiementInfo;
+            $facture->assurec = FactureConsultation::calculAssurec($request->input('montant'), $facture->patient->prise_en_charge);
+            $facture->assurancec = FactureConsultation::calculAssuranceC($request->input('montant'), $facture->patient->prise_en_charge);
+            $facture->reste = FactureConsultation::calculReste($facture->assurec, $facture->avance);
+            $facture->statut = $facture->reste == 0 ? 'Soldée' : 'Non soldée';
+            $facture->save();
+
+            $facture->historiques()->save($historiqueFacture);
+        });
+
+        Cache::tags(['factures'])->flush();
+
         return redirect()->action('FactureController@FactureConsultation')->with('info', 'La facture n° '.$id.' à bien été mise à jour');
     }
 
@@ -229,28 +266,31 @@ class FactureController extends Controller
 
     public function export_consultation($id)
     {
-        ini_set('max_execution_time', 300); // 300 secondes = 5 minutes
-        ini_set('memory_limit', '512M');    // Augmenter la mémoire
+        ini_set('max_execution_time', 300);
+        ini_set('memory_limit', '512M');
 
-         // Authorization
-         $this->authorize('update', Patient::class);
-         $this->authorize('print', Patient::class);
+        $this->authorize('update', Patient::class);
+        $this->authorize('print', Patient::class);
 
-         // Optimize the query by eager loading the patient relationship
-         $facture = FactureConsultation::with('patient')->findOrFail($id);
-         $facturepatient = FactureConsultation::where('id', $id)->pluck('patient_id')->first();
-         $patient = Patient::find($facturepatient);
-         // Load the PDF view with necessary data only
-        //  dd($facturepatient,$patient);
-         $pdf = PDF::loadView('admin.etats.consultation', [
-             'patient' => $patient,
-             'facture' => $facture
-         ]);
+        // Optimize with specific columns and eager loading
+        $facture = FactureConsultation::with(['patient:id,name,prenom,numero_dossier,user_id,created_at,demarcheur', 'patient.user:id,name,prenom'])
+            ->select([
+                'id', 'numero', 'patient_id', 'montant', 'avance', 
+                'reste', 'motif', 'details_motif', 'date_insertion'
+            ])
+            ->findOrFail($id);
 
+        $pdf = PDF::loadView('admin.etats.consultation', [
+            'patient' => $facture->patient,
+            'facture' => $facture
+        ]);
 
-        // Stream the PDF
         return $pdf->stream('factures.consultation_pdf');
-        //  return view('admin.factures.consultation', compact('factureConsultations', 'lists'));
+
+
+
+       
+
     }
 
     public function export_client($id)
@@ -276,18 +316,27 @@ class FactureController extends Controller
     // }
 
 
-    public function export_bilan_consultation()
+    public function export_bilan_consultation(Request $request)
     {
 
-        $service = \request('service') == 'Tout'? "" : \request('service');
+        $service = $request->input('service') === 'Tout' ? "" : $request->input('service');
+    
 
-        $factures = HistoriqueFacture::where('created_at', 'LIKE', \request('day').'%')
-                    ->with('facture_consultation.patient')
-                    ->whereHas('facture_consultation', function (Builder $query) use ($service) {
-                        $query->where('motif', 'LIKE', '%'.$service)
-                            ->where('deleted_at', '=', null);
-                        })
-                    ->get()->groupBy('facture_consultation_id');
+        $factures = HistoriqueFacture::with([
+            'facture_consultation:id,numero,patient_id,montant,motif,medecin_r,demarcheur',
+            'facture_consultation.patient:id,name'
+        ])
+        ->where('created_at', 'LIKE', $request->input('day').'%')
+        ->whereHas('facture_consultation', function ($query) use ($service) {
+            $query->where('motif', 'LIKE', '%'.$service)
+                ->whereNull('deleted_at');
+        })
+        ->select([
+            'id', 'facture_consultation_id', 'montant', 'percu', 
+            'reste', 'mode_paiement', 'created_at'
+        ])
+        ->get()
+        ->groupBy('facture_consultation_id');
         $totalPercu = 0;
         $totalMontant = 0;
         $totalReste = 0;
@@ -377,33 +426,30 @@ class FactureController extends Controller
             $totalPartPatient += $tFactures[$key]['partPatient'];
         }
 
-         $pdf = PDF::loadView('admin.etats.bilan_consultation', [
-            'mode_paiement' => $modePaiement,
-            'service' => $service==""? "" : '- '.$service,
-            'tFactures' => $tFactures,
-            'totalPercu' => $totalPercu,
-            'totalMontant' => $totalMontant,
-            'totalReste' => $totalReste,
-            'totalPartAssurance' => $totalPartAssurance,
-            'totalPartPatient' => $totalPartPatient,
-        ]);
+        $pdf = PDF::loadView('admin.etats.bilan_consultation', compact(
+            'mode_paiement', 'service', 'tFactures', 
+            'totalPercu', 'totalMontant', 'totalReste', 
+            'totalPartAssurance', 'totalPartPatient'
+        ));
 
-        $pdf->setPaper('A4', 'landscape');
+         $pdf->setPaper('A4', 'landscape');
 
         return $pdf->stream('bilan_facture_consultation.pdf');
      }
 
-    public function export_bilan_clientexterne()
+    public function export_bilan_clientexterne(Request $request)
     {
 
 
-        $factures = FactureClient::with('client')->where('date_insertion', '=', \request('day'))->get();
+        $day = $request->input('day');
 
-        $totalPercu = DB::table('facture_clients')->where('date_insertion', '=', \request('day'))->sum('montant');
-        $avances = DB::table('facture_clients')->where('date_insertion', '=', \request('day'))->sum('avance');
-        $restes = DB::table('facture_clients')->where('date_insertion', '=', \request('day'))->sum('reste');
-        $assurances = DB::table('facture_clients')->where('date_insertion', '=', \request('day'))->sum('partassurance');
-        $clients = DB::table('facture_clients')->where('date_insertion', '=', \request('day'))->sum('partpatient');
+        $factures = FactureClient::with('client')->where('date_insertion', '=', $day)->get();
+
+        $totalPercu = DB::table('facture_clients')->where('date_insertion', '=', $day)->sum('montant');
+        $avances = DB::table('facture_clients')->where('date_insertion', '=', $day)->sum('avance');
+        $restes = DB::table('facture_clients')->where('date_insertion', '=', $day)->sum('reste');
+        $assurances = DB::table('facture_clients')->where('date_insertion', '=', $day)->sum('partassurance');
+        $clients = DB::table('facture_clients')->where('date_insertion', '=', $day)->sum('partpatient');
 
 
 
@@ -421,3 +467,6 @@ class FactureController extends Controller
         return $pdf->stream('bilan_facture_clientexterne.pdf');
     }
 }
+
+
+

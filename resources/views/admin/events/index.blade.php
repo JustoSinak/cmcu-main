@@ -2,11 +2,13 @@
 <htms lang="fr">
 
 <head>
+
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite('resources/assets/sass/app.scss')
     @vite('resources/css/all.scss')
     @vite('resources/js/all.js')
-    @vite('resources/assets/js/app.js')
+    @vite('resources/js/app.js')
     <link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <script src="{{ asset('admin/js/modernizr.js') }}"></script>
@@ -222,10 +224,14 @@
         </div>
     </div>
     <script src="{{ asset('admin/@fullcalendar/core@4.3.1/main.min.js') }}"></script>
-    <script src="{{ asset('admin/@fullcalendar/timeline@4.3.0/main.min.js')}}"></script>
-    <script src="{{ asset('admin/@fullcalendar/interaction@4.3.0/main.min.js')}}"></script>
-    <script src="{{ asset('admin/@fullcalendar/resource-common@4.3.1/main.min.js')}}"></script>
-    <script src="{{ asset('admin/@fullcalendar/resource-timeline@4.3.0/main.min.js')}}"></script>
+    <script src="{{ asset('admin/@fullcalendar/timeline@4.3.0/main.min.js') }}"></script>
+    <script src="{{ asset('admin/@fullcalendar/interaction@4.3.0/main.min.js') }}"></script>
+    <script src="{{ asset('admin/@fullcalendar/resource-common@4.3.1/main.min.js') }}"></script>
+    <script src="{{ asset('admin/@fullcalendar/resource-timeline@4.3.0/main.min.js') }}"></script>
+    <script src="{{ asset('admin/@fullcalendar/bootstrap@4.3.0/main.min.js') }}"></script>
+    <script src="{{ asset('admin/@fullcalendar/daygrid@4.3.0/main.min.js') }}"></script>
+    <script src="{{ asset('admin/@fullcalendar/timegrid@4.3.0/main.min.js') }}"></script>
+    <script src="{{ asset('admin/@fullcalendar/list@4.3.0/main.min.js') }}"></script>
 
     <script>
         $('#nouveauRV').on('shown.bs.modal', function() {
@@ -621,3 +627,9 @@
 </body>
 
 </htms>
+
+
+
+
+
+

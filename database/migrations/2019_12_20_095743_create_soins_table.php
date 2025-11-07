@@ -20,6 +20,11 @@ class CreateSoinsTable extends Migration {
 			$table->text('content');
 			$table->string('contexte');
 			$table->timestamps();
+
+			// Add indexes on foreign keys and frequently queried columns
+			$table->foreign('user_id')->references('id')->on('users');
+			$table->foreign('patient_id')->references('id')->on('patients');
+			$table->index(['contexte', 'created_at']); // Composite index for common queries
 		});
 	}
 
@@ -31,7 +36,14 @@ class CreateSoinsTable extends Migration {
 	 */
 	public function down()
 	{
+		Schema::table('soins', function(Blueprint $table) {
+			$table->dropForeign(['user_id']);
+			$table->dropForeign(['patient_id']); 
+			$table->dropIndex(['contexte', 'created_at']);
+		});
 		Schema::drop('soins');
 	}
 
 }
+
+

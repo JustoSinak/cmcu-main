@@ -74,10 +74,18 @@ return [
             'driver' => 'redis',
             'connection' => 'cache',
             'lock_connection' => 'default',
+            'serialize' => true,
+            'compression' => true,
         ],
 
     ],
 
+    'redis' => [
+        'driver' => 'redis',
+        'connection' => 'cache',
+        'lock_connection' => 'default',
+        'ttl' => 3600, // 1 hour default
+    ],
     /*
     |--------------------------------------------------------------------------
     | Cache Key Prefix

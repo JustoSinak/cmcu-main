@@ -4,44 +4,40 @@ namespace App\Http\Controllers;
 use App\Models\Imagerie;
 use Illuminate\Http\Request;
 use App\Models\Patient;
-// use Barryvdh\DomPDF\Facade as PDF;
 use ZanySoft\LaravelPDF\PDF;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class ImagerieController extends Controller
 {
-    public function create(patient $patient)
+    public function create(Patient $patient)
     {
-        $imageries = Imagerie::with('patient')->where('patient_id', $patient->id)->get();
+        $imageries = Cache::remember("imageries_patient_{$patient->id}", 600, function () use ($patient) {
+            return Imagerie::with('patient')->where('patient_id', $patient->id)->select('id','radiographie','echographie','scanner','irm','scintigraphie','autre','patient_id')->get();
+        });
         return view('admin.consultations.partials.feuille_examen_imagerie', compact('patient', 'imageries'));
     }
 
-
-
     public function store(Request $request)
     {
-       
-       $imageries = [];
-        $patient = Patient::findOrFail($request->patient_id);
-
-        $imageries = new Imagerie ();
-
-       
-        $imageries->radiographie = implode(',', $request->radiographie ?? []);
-        $imageries->echographie = implode(',', $request->echographie  ?? []);
-        $imageries->scanner = implode(',', $request->scanner ?? []);
-        $imageries->irm = implode(',', $request->irm ?? []);
-        $imageries->scintigraphie = implode(',', $request->scintigraphie ?? []);
-        $imageries->autre = implode(',', $request->autre ?? []);
-        $imageries->patient_id = $request->patient_id;
-        $imageries->user_id = Auth::id();
-        
-        $imageries->save();
+        DB::transaction(function () use ($request) {
+            $patient = Patient::select('id')->findOrFail($request->input('patient_id'));
+            $imageries = new Imagerie();
+            $imageries->radiographie = implode(',', $request->input('radiographie', []));
+            $imageries->echographie = implode(',', $request->input('echographie', []));
+            $imageries->scanner = implode(',', $request->input('scanner', []));
+            $imageries->irm = implode(',', $request->input('irm', []));
+            $imageries->scintigraphie = implode(',', $request->input('scintigraphie', []));
+            $imageries->autre = implode(',', $request->input('autre', []));
+            $imageries->patient_id = $patient->id;
+            $imageries->user_id = Auth::id();
+            $imageries->save();
+            Cache::forget("imageries_patient_{$patient->id}");
+        });
 
         Flash('La nouvelle prescription a été crée avec succès !!');
-
         return back();
-    
     }
 
     public function show(Request $request, $id)

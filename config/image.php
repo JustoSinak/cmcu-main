@@ -14,7 +14,18 @@ return [
     | Supported: "gd", "imagick"
     |
     */
-
-    'driver' => 'gd'
+    'driver' => env('IMAGE_DRIVER', 'gd'),
+    
+    'cache' => [
+        'enabled' => true,
+        'path' => storage_path('app/image-cache'),
+        'lifetime' => 2628000, // 1 month
+    ],
+    
+    'optimization' => [
+        'jpeg_quality' => 85,
+        'webp_quality' => 85,
+        'png_compression' => 9,
+    ],
 
 ];

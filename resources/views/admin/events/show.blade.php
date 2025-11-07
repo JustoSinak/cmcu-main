@@ -3,15 +3,17 @@
 
 <head>
     @vite('resources/assets/sass/app.scss')
-    <!-- @vite('resources/assets/css/all.scss') -->
     @vite('resources/css/all.scss')
     @vite('resources/js/all.js')
-    @vite('resources/assets/js/app.js')
+    @vite('resources/js/app.js')
     <link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <script src="{{ asset('admin/js/modernizr.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('admin/@fullcalendar/core@4.3.1/main.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/@fullcalendar/list@4.3.0/main.min.css') }}">
+   <link rel="stylesheet" href="{{ asset('admin/@fullcalendar/core@4.3.1/main.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/@fullcalendar/resource-timeline@4.3.0/main.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/@fullcalendar/timeline@4.3.0/main.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/@fullcalendar/list@4.3.0/main.min.css') }}"></div>
+
     <style>
         /* ... */
     </style>

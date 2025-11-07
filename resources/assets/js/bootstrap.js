@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from 'lodash-es';
 window._ = _;
 
 // Bootstrap 5 includes Popper.js internally, so we don't need to import it separately

@@ -1,83 +1,46 @@
 {
-  "_jquery-DKenW1nw.js": {
-    "file": "assets/jquery-DKenW1nw.js",
-    "name": "jquery"
-  },
-  "_jquery-OYQeOk-R.js": {
-    "file": "assets/jquery-OYQeOk-R.js",
-    "name": "jquery",
-    "imports": [
-      "_jquery-DKenW1nw.js"
-    ]
-  },
-  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
-    "file": "assets/fa-brands-400-D1LuMI3I.ttf",
-    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf"
-  },
-  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2": {
-    "file": "assets/fa-brands-400-D_cYUPeE.woff2",
-    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2"
-  },
-  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf": {
-    "file": "assets/fa-regular-400-DZaxPHgR.ttf",
-    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf"
-  },
-  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2": {
-    "file": "assets/fa-regular-400-BjRzuEpd.woff2",
-    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2"
-  },
-  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": {
-    "file": "assets/fa-solid-900-D0aA9rwL.ttf",
-    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf"
-  },
-  "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": {
-    "file": "assets/fa-solid-900-CTAAxXor.woff2",
-    "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
-  },
-  "resources/assets/js/app.js": {
-    "file": "assets/app-veQqQli8.js",
-    "name": "app",
-    "src": "resources/assets/js/app.js",
-    "isEntry": true,
-    "imports": [
-      "_jquery-OYQeOk-R.js",
-      "_jquery-DKenW1nw.js"
-    ]
+  "_jquery.min-Dt-737m4.js": {
+    "file": "js/jquery.min-Dt-737m4.js",
+    "name": "jquery.min"
   },
   "resources/assets/sass/app.scss": {
-    "file": "assets/app-scss-DLsC9DDZ.css",
+    "file": "css/app-De5-D8W8.css",
     "src": "resources/assets/sass/app.scss",
     "isEntry": true,
+    "name": "app",
     "names": [
-      "app-scss.css"
+      "app.css",
+      "app.css"
     ]
   },
   "resources/css/all.scss": {
-    "file": "assets/all-scss-BrQ18ben.css",
+    "file": "css/all-DPpVmoZn.css",
     "src": "resources/css/all.scss",
     "isEntry": true,
+    "name": "all",
     "names": [
-      "all-scss.css"
+      "all.css"
     ]
   },
   "resources/js/all.js": {
-    "file": "assets/all-Z8-xHRU9.js",
+    "file": "js/all-COSee-0E.js",
     "name": "all",
     "src": "resources/js/all.js",
     "isEntry": true,
     "imports": [
-      "_jquery-OYQeOk-R.js",
-      "resources/js/typehead.js",
-      "_jquery-DKenW1nw.js"
+      "_jquery.min-Dt-737m4.js"
     ]
   },
-  "resources/js/typehead.js": {
-    "file": "assets/typehead-UhImJAUm.js",
-    "name": "typehead",
-    "src": "resources/js/typehead.js",
+  "resources/js/app.js": {
+    "file": "js/app-DVT7RzOW.js",
+    "name": "app",
+    "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_jquery-DKenW1nw.js"
+      "_jquery.min-Dt-737m4.js"
+    ],
+    "css": [
+      "css/app-De5-D8W8.css"
     ]
   }
 }

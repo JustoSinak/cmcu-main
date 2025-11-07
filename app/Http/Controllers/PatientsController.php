@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Consultation;
 use App\Models\ConsultationAnesthesiste;
 use App\Models\Dossier;
@@ -17,11 +16,10 @@ use App\Models\SurveillancePostAnesthesique;
 use App\Models\HistoriqueFacture;
 use App\Models\User;
 use App\Models\VisitePreanesthesique;
-// use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Cache;
-// use MercurySeries\Flashy\Flashy;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Laracasts\Flash\Flash;
 use ZanySoft\LaravelPDF\PDF;
 
@@ -32,20 +30,48 @@ class PatientsController extends Controller
     public function index(Request $request)
     {
         $this->authorize('update', Patient::class);
+        
         $name = $request->input('name');
-        if ($name) {
-            $patients = Patient::where('nom', 'like', "%{$name}%")->paginate(10);
-        } else {
-            $patients = Patient::paginate(10);
-        }
-        return view('admin.patients.index', compact('patients', 'name'));
+        $perPage = (int) $request->input('per_page', 50);
+        $page = (int) $request->input('page', 1);
 
+        $cacheKey = sprintf('patients.index.%s.%s.%s', auth()->id(), $name ?: 'all', $page);
+
+        $patients = Cache::tags(['patients'])
+            ->remember($cacheKey, 900, function () use ($name, $perPage) {
+                return Patient::select('id', 'numero_dossier', 'name', 'prenom', 'montant', 'reste', 'created_at')
+                    ->when($name, function ($query, $name) {
+                        return $query->where(function ($innerQuery) use ($name) {
+                            $innerQuery->where('name', 'like', "%{$name}%")
+                                ->orWhere('prenom', 'like', "%{$name}%");
+                        });
+                    })
+                    ->latest()
+                    ->paginate($perPage);
+            });
+
+        if ($patients instanceof \Illuminate\Contracts\Pagination\Paginator && $name) {
+            $patients->appends(['name' => $name]);
+        }
+
+        return view('admin.patients.index', compact('patients', 'name', 'perPage'));
     }
+
+
+
+
+
+    
 
     public function create(User $user)
     {
         $this->authorize('update', Patient::class);
-        $users = User::where('role_id', '=', 2)->with('patients')->get();
+        $users = Cache::tags(['users'])->remember('users.role.2', 1800, function () {
+            return User::where('role_id', 2)
+                ->select('id', 'name', 'prenom')
+                ->orderBy('name')
+                ->get();
+        });
         return view('admin.patients.create', compact('users'));
     }
 
@@ -57,7 +83,6 @@ class PatientsController extends Controller
         $request->validate([
             'name' => 'required',
             'mode_paiement' => 'required',
-            'name' => 'required',
             'prenom' => '',
             'assurance' => '',
             'assurancec' => '',
@@ -80,61 +105,148 @@ class PatientsController extends Controller
         ]);
         
         //
-        if ($request->get('mode_paiement') === "chèque") {
-            $mode_paiement_info_sup = $request->get('num_cheque')." // ".$request->get('emetteur_cheque')." // ".$request->get('banque_cheque');
-        } else {
-            $mode_paiement_info_sup = ($request->get('mode_paiement') === "bon de prise en charge") ? $request->get('emetteur_bpc'): "" ;
-        }
+        $modePaiementInfo = $request->input('mode_paiement') === 'chèque'
+            ? collect([
+                $request->input('num_cheque'),
+                $request->input('emetteur_cheque'),
+                $request->input('banque_cheque')
+            ])->filter()->implode(' // ')
+            : ($request->input('mode_paiement') === 'bon de prise en charge'
+                ? $request->input('emetteur_bpc')
+                : '');
 
-        $patient = new Patient();
+        DB::transaction(function () use ($request, $modePaiementInfo) {
+            $montant = $request->input('montant');
+            $priseEnCharge = $request->input('prise_en_charge');
+            $avance = $request->input('avance');
 
-        $patient->numero_dossier = mt_rand(1000000, 9999999) - 1;
-        $patient->name = $request->get('name');
-        $patient->prenom = $request->get('prenom');
-        $patient->montant = $request->get('montant');
-        $patient->assurance = $request->get('assurance');
-        $patient->avance = $request->get('avance');
-        $patient->motif =$request->get('motif');
-        $patient->mode_paiement =$request->get('mode_paiement');
-        $patient->mode_paiement_info_sup = $mode_paiement_info_sup;
-        $patient->details_motif =$request->get('details_motif');
+            Patient::create([
+                'numero_dossier' => mt_rand(1000000, 9999999) - 1,
+                'name' => $request->input('name'),
+                'prenom' => $request->input('prenom'),
+                'montant' => $montant,
+                'assurance' => $request->input('assurance'),
+                'avance' => $avance,
+                'motif' => $request->input('motif'),
+                'mode_paiement' => $request->input('mode_paiement'),
+                'mode_paiement_info_sup' => $modePaiementInfo,
+                'details_motif' => $request->input('details_motif'),
+                'numero_assurance' => $request->input('numero_assurance'),
+                'prise_en_charge' => $priseEnCharge,
+                'assurec' => FactureConsultation::calculAssurec($montant, $priseEnCharge),
+                'assurancec' => FactureConsultation::calculAssuranceC($montant, $priseEnCharge),
+                'reste' => FactureConsultation::calculReste(
+                    FactureConsultation::calculAssurec($montant, $priseEnCharge),
+                    $avance
+                ),
+                'demarcheur' => $request->input('demarcheur'),
+                'date_insertion' => $request->input('date_insertion'),
+                'medecin_r' => $request->input('medecin_r'),
+                'user_id' => Auth::id(),
+            ]);
+        });
 
-        $patient->numero_assurance = $request->get('numero_assurance');
-        $patient->prise_en_charge = $request->get('prise_en_charge');
-        $patient->assurec = FactureConsultation::calculAssurec($request->get('montant'), $request->get('prise_en_charge'));
-        $patient->assurancec = FactureConsultation::calculAssuranceC($request->get('montant'), $request->get('prise_en_charge'));
-        $patient->reste = FactureConsultation::calculReste($patient->assurec, $request->get('avance'));
-
-        $patient->demarcheur = $request->get('demarcheur');
-        $patient->date_insertion = $request->get('date_insertion');
-        $patient->medecin_r = $request->get('medecin_r');
-        $patient->user_id = Auth::id();
-
-        $patient->save();
+        Cache::tags(['patients'])->flush();
 
         return redirect()->route('patients.index')->with('success', 'Le patient a été ajouté avec succès !');
     }
 
 
+    // public function show(Patient $patient, Consultation $consultation)
     public function show(Patient $patient, Consultation $consultation)
     {
         $this->authorize('update', Patient::class);
+        
+        // Get paginated examens
+        $examens_scannes = $patient->examens()->latest()->paginate(4);
+        
+        // Optimize with single query using eager loading for other relationships
+        $patient->load([
+            'consultations' => function ($query) {
+                $query->with(['user:id,name'])
+                    ->select('id', 'patient_id', 'user_id', 'diagnostic', 'date_consultation', 'created_at')
+                    ->latest();
+            },
+            'consultation_anesthesistes' => function ($query) {
+                $query->with(['user:id,name'])
+                    ->select('id', 'patient_id', 'user_id', 'date_intervention', 'created_at')
+                    ->latest();
+            },
+            'dossiers' => function ($query) {
+                $query->select('id', 'patient_id', 'sexe', 'date_naissance', 'created_at')
+                    ->latest();
+            },
+            'parametres' => function ($query) {
+                $query->select('id', 'patient_id', 'poids', 'taille', 'created_at')
+                    ->latest();
+            },
+            'premedications' => function ($query) {
+                $query->select('id', 'patient_id', 'created_at')
+                    ->latest();
+            },
+            'ordonances' => function ($query) {
+                $query->select('id', 'patient_id', 'created_at')
+                    ->latest()
+                    ->limit(5);
+            }
+        ]);
+        
+        $medecin = Cache::tags(['users'])->remember('medecins_list', 3600, function () {
+            return User::where('role_id', 2)
+                ->select('id', 'name', 'prenom')
+                ->orderBy('name')
+                ->get();
+        });
+        
+        $ficheInterventions = Cache::tags(['patients'])->remember("patient.{$patient->id}.fiche_interventions", 900, function () use ($patient) {
+            return $patient->fiche_interventions()
+                ->with(['user:id,name'])
+                ->select('id', 'patient_id', 'user_id', 'created_at')
+                ->latest()
+                ->limit(10)
+                ->get();
+        });
+
+        $latestVisite = Cache::tags(['patients'])->remember("patient.{$patient->id}.visite_preanesthesique", 900, function () use ($patient) {
+            return $patient->visite_preanesthesiques()
+                ->with(['patient:id,name,prenom', 'user:id,name'])
+                ->select('id', 'patient_id', 'user_id', 'created_at')
+                ->latest()
+                ->first();
+        });
+
+        $ordonances = $patient->ordonances()
+            ->with(['user:id,name'])
+            ->select('id', 'patient_id', 'user_id', 'created_at')
+            ->latest()
+            ->paginate(5);
+
+        $premedications = $patient->premedications()
+            ->select('id', 'patient_id', 'created_at')
+            ->latest()
+            ->get();
+
+        $prescriptions = $patient->prescriptions()
+            ->with(['user:id,name'])
+            ->select('id', 'patient_id', 'user_id', 'created_at')
+            ->latest()
+            ->get();
+
         return view('admin.patients.show', [
             'patient' => $patient,
-            'examens_scannes'  => $patient->examens()->paginate(4),
-            'medecin' => User::where('role_id', '=', 2)->orderby('name')->get(),
-            'consultations' => Consultation::with('patient', 'user')->where('patient_id', '=', $patient->id)->latest()->first(),
-            'consultation_anesthesistes' => ConsultationAnesthesiste::with('patient', 'user')->latest()->first(),
-            'visite_anesthesistes' => VisitePreanesthesique::with('patient', 'user')->latest()->first(),
-            'fiche_interventions' => FicheIntervention::with('patient', 'user')->get(),
-            'prescriptions' => $patient->prescriptions()->get(),
+            'examens_scannes' => $examens_scannes,
+            'medecin' => $medecin,
+            'consultations' => $patient->consultations->first(),
+            'consultation_anesthesistes' => $patient->consultation_anesthesistes->first(),
+            'visite_anesthesistes' => $latestVisite,
+            'fiche_interventions' => $ficheInterventions,
+            'prescriptions' => $prescriptions,
             'consultation' => $consultation,
-            'ordonances' => $patient->ordonances()->paginate(5),
-            'dossiers' => $patient->dossiers()->latest()->first(),
-            'parametres' => $patient->parametres()->latest()->first(),
-            'premedications' => $patient->premedications()->latest()->get(),
-            'compte_rendu_bloc_operatoires' => $patient->compte_rendu_bloc_operatoires()->latest()->first()
-
+            'ordonances' => $ordonances,
+            'dossiers' => $patient->dossiers->first(),
+            'parametres' => $patient->parametres->first(),
+            'premedications' => $premedications,
+            'compte_rendu_bloc_operatoires' => $patient->compte_rendu_bloc_operatoires()->select('id', 'patient_id', 'created_at')->latest()->first()
         ]);
     }
 
@@ -165,24 +277,31 @@ class PatientsController extends Controller
 
         $patient = Patient::findOrFail($id);
 
-        $patient->assurance = $request->get('assurance');
-        $patient->numero_assurance = $request->get('numero_assurance');
-        $patient->name = $request->get('name');
-        $patient->montant = $request->get('montant');
-        $patient->motif =$request->get('motif');
-        $patient->details_motif =$request->get('details_motif');
-        $patient->avance = $request->get('avance');
-        $patient->reste = $request->get('reste');
-        $patient->reste1 = $request->get('reste1');
-        $patient->assurancec = $request->get('assurancec');
-        $patient->assurec = $request->get('assurec');
-        $patient->demarcheur = $request->get('demarcheur');
-        $patient->prise_en_charge = $request->get('prise_en_charge');
-        $patient->date_insertion = $request->get('date_insertion');
-        $patient->prenom = $request->get('prenom');
-        $patient->medecin_r = $request->get('medecin_r');
-        $patient->user_id = Auth::id();
-        $patient->save();
+        DB::transaction(function () use ($patient, $request) {
+            $patient->fill([
+                'assurance' => $request->input('assurance'),
+                'numero_assurance' => $request->input('numero_assurance'),
+                'name' => $request->input('name'),
+                'montant' => $request->input('montant'),
+                'motif' => $request->input('motif'),
+                'details_motif' => $request->input('details_motif'),
+                'avance' => $request->input('avance'),
+                'reste' => $request->input('reste'),
+                'reste1' => $request->input('reste1'),
+                'assurancec' => $request->input('assurancec'),
+                'assurec' => $request->input('assurec'),
+                'demarcheur' => $request->input('demarcheur'),
+                'prise_en_charge' => $request->input('prise_en_charge'),
+                'date_insertion' => $request->input('date_insertion'),
+                'prenom' => $request->input('prenom'),
+                'medecin_r' => $request->input('medecin_r'),
+                'user_id' => Auth::id(),
+            ]);
+
+            $patient->save();
+        });
+
+        Cache::tags(['patients'])->flush();
 
         return redirect()->route('patients.show', $patient->id)->with('success', 'Les informations du patient ont été mis à jour avec succès !');
     }
@@ -210,29 +329,46 @@ class PatientsController extends Controller
 
 
         $patient = Patient::findOrFail($id);
-        if ($request->get('mode_paiement') === "chèque") {
-            $mode_paiement_info_sup = $request->get('num_cheque')." // ".$request->get('emetteur_cheque')." // ".$request->get('banque_cheque');
-        } else {
-            $mode_paiement_info_sup = ($request->get('mode_paiement') === "bon de prise en charge") ? $request->get('emetteur_bpc'): "" ;
-        }
-        
-        
-        $patient->name = $request->get('name');
-        $patient->prenom = $request->get('prenom');
-        $patient->medecin_r = $request->get('medecin_r');
-        $patient->mode_paiement_info_sup =$mode_paiement_info_sup;
-        $patient->montant = $request->get('montant');
-        $patient->details_motif =$request->get('details_motif');
-        $patient->assurance =$request->get('assurance');
-        $patient->avance =$request->get('avance');
-        $patient->mode_paiement =$request->get('mode_paiement');
-        $patient->prise_en_charge =$request->get('prise_en_charge');
-        $patient->assurec = FactureConsultation::calculAssurec($request->get('montant'), $patient->prise_en_charge);
-        $patient->assurancec = FactureConsultation::calculAssuranceC($request->get('montant'), $patient->prise_en_charge);
-        $patient->reste = FactureConsultation::calculReste($patient->assurec, $patient->avance);
-        $patient->numero_assurance =$request->get('numero_assurance');
-        $patient->user_id = Auth::id();
-        $patient->save();
+
+        $modePaiementInfo = $request->input('mode_paiement') === 'chèque'
+            ? collect([
+                $request->input('num_cheque'),
+                $request->input('emetteur_cheque'),
+                $request->input('banque_cheque')
+            ])->filter()->implode(' // ')
+            : ($request->input('mode_paiement') === 'bon de prise en charge'
+                ? $request->input('emetteur_bpc')
+                : '');
+
+        DB::transaction(function () use ($patient, $request, $modePaiementInfo) {
+            $montant = $request->input('montant');
+            $priseEnCharge = $request->input('prise_en_charge');
+            $avance = $request->input('avance');
+
+            $assurec = FactureConsultation::calculAssurec($montant, $priseEnCharge);
+
+            $patient->fill([
+                'name' => $request->input('name'),
+                'prenom' => $request->input('prenom'),
+                'medecin_r' => $request->input('medecin_r'),
+                'mode_paiement_info_sup' => $modePaiementInfo,
+                'montant' => $montant,
+                'details_motif' => $request->input('details_motif'),
+                'assurance' => $request->input('assurance'),
+                'avance' => $avance,
+                'mode_paiement' => $request->input('mode_paiement'),
+                'prise_en_charge' => $priseEnCharge,
+                'assurec' => $assurec,
+                'assurancec' => FactureConsultation::calculAssuranceC($montant, $priseEnCharge),
+                'reste' => FactureConsultation::calculReste($assurec, $avance),
+                'numero_assurance' => $request->input('numero_assurance'),
+                'user_id' => Auth::id(),
+            ]);
+
+            $patient->save();
+        });
+
+        Cache::tags(['patients'])->flush();
 
         return redirect()->route('patients.show', $patient->id)->with('success', 'Le motif et le montant ont été mis à jour avec succès !');
     }
@@ -257,7 +393,10 @@ class PatientsController extends Controller
 
         $pdf = PDF::loadView('admin.etats.lettre', [
             'patient' => $patient,
-            'consultations' => Consultation::where('patient_id', $patient->id)->latest()->first(),
+            'consultations' => Consultation::where('patient_id', $patient->id)
+                ->select('id', 'patient_id', 'diagnostic', 'created_at')
+                ->latest()
+                ->first(),
             'dossier' => $dossier,
         ]);
 
@@ -267,7 +406,11 @@ class PatientsController extends Controller
 
     public function destroy(Patient $patient)
     {
-        $patient->delete();
+        DB::transaction(function () use ($patient) {
+            $patient->delete();
+        });
+
+        Cache::tags(['patients'])->flush();
 
         return redirect()->route('patients.index')->with('success', "Le dossier du patient a bien été supprimé");
     }
@@ -277,48 +420,66 @@ class PatientsController extends Controller
     {
         $this->authorize('update', Patient::class);
         $this->authorize('print', Patient::class);
-        $patient = Patient::find($id);
-        $statut_facture = $patient->reste == 0 ? 'Soldée' : 'Non soldée';
-        
-        $facture = FactureConsultation::create([
-            'numero' => $patient->numero_dossier,
-            'patient_id' => $patient->id,
-            'assurancec' => $patient->assurancec,
-            'assurec' => $patient->assurec,
-            'mode_paiement' => $patient->mode_paiement,
-            'mode_paiement_info_sup' => $patient->mode_paiement_info_sup,
-            'motif' => $patient->motif,
-            'details_motif' => $patient->details_motif,
-            'montant' => $patient->montant,
-            'demarcheur' => $patient->demarcheur,
-            'avance' => $patient->avance,
-            'reste' => $patient->reste,
-            'prenom' => $patient->prenom,
-            'medecin_r' => $patient->medecin_r,
-            'date_insertion' => date('Y-m-d'),
-            'user_id' => auth()->user()->id,
-            'statut' => $statut_facture,
-        ]);
+        $patient = Patient::select([
+            'id', 'numero_dossier', 'name', 'prenom', 'montant',
+            'avance', 'reste', 'assurec', 'assurancec', 'mode_paiement',
+            'mode_paiement_info_sup', 'motif', 'details_motif',
+            'demarcheur', 'medecin_r'
+        ])->findOrFail($id);
 
-        $historiqueFacture = new HistoriqueFacture([
-            'reste' => $facture->reste,
-            'montant' => $facture->montant,
-            'percu'   => $facture->avance,
-            'assurec'  => $facture->assurec,
-            'mode_paiement' => $facture->mode_paiement,
-        ]);
-        $facture->historiques()->save($historiqueFacture);
+        $statutFacture = $patient->reste == 0 ? 'Soldée' : 'Non soldée';
 
-        return redirect()->route('factures.consultation')->with('success', 'Facture n° '.$facture->id.' du patient '.$patient->name.' générée avec succès!');
+        $facture = DB::transaction(function () use ($patient, $statutFacture) {
+            $facture = FactureConsultation::create([
+                'numero' => $patient->numero_dossier,
+                'patient_id' => $patient->id,
+                'assurancec' => $patient->assurancec,
+                'assurec' => $patient->assurec,
+                'mode_paiement' => $patient->mode_paiement,
+                'mode_paiement_info_sup' => $patient->mode_paiement_info_sup,
+                'motif' => $patient->motif,
+                'details_motif' => $patient->details_motif,
+                'montant' => $patient->montant,
+                'demarcheur' => $patient->demarcheur,
+                'avance' => $patient->avance,
+                'reste' => $patient->reste,
+                'prenom' => $patient->prenom,
+                'medecin_r' => $patient->medecin_r,
+                'date_insertion' => now()->toDateString(),
+                'user_id' => auth()->id(),
+                'statut' => $statutFacture,
+            ]);
+
+            $facture->historiques()->create([
+                'reste' => $facture->reste,
+                'montant' => $facture->montant,
+                'percu' => $facture->avance,
+                'assurec' => $facture->assurec,
+                'mode_paiement' => $facture->mode_paiement,
+            ]);
+
+            return $facture;
+        });
+
+        Cache::tags(['factures', 'patients'])->flush();
+
+        return redirect()->route('factures.consultation')
+            ->with('success', 'Facture n° '.$facture->id.' générée avec succès!');
     }
 
     public function FcheConsommableCreate(FicheConsommable $consommable, Patient $patient)
     {
 
+        $consommables = $patient->fiche_consommables()
+            ->with(['patient:id,name'])
+            ->select('id', 'patient_id', 'consommable', 'jour', 'nuit', 'date', 'created_at')
+            ->latest()
+            ->paginate(20);
+
         return view('admin.patients.fiche_consommable', [
-            'produits' => Produit::all(),
+            'produits' => Produit::select('id', 'designation', 'qte_stock')->orderBy('designation')->get(),
             'consommable' => $consommable,
-            'consommables' => FicheConsommable::with('patient')->where('patient_id', '=', $patient->id)->get(),
+            'consommables' => $consommables,
             'patient' => $patient,
             'user_id' => auth()->user()->id
         ]);
@@ -326,58 +487,75 @@ class PatientsController extends Controller
 
     public function Autocomplete(Request $request)
     {
+        $query = $request->input('query');
 
-        $datas = Produit::select('designation')->where('designation', 'LIKE', "%{$request->input('query')}%")->get();
+        $datas = Produit::select('designation')
+            ->where('designation', 'LIKE', "%{$query}%")
+            ->limit(10)
+            ->get();
 
-        $results = [];
-        foreach ($datas as $data)
-        {
-            $results[] = $data->designation;
-        }
+        $results = $datas->pluck('designation');
         return response()->json($results);
     }
 
     public function FcheConsommableStore(Request $request)
     {
-
-        FicheConsommable::create([
-            'user_id' => \request('user_id'),
-            'patient_id' => \request('patient_id'),
-            'consommable' => \request('consommable'),
-            'jour' => \request('jour'),
-            'nuit' => \request('nuit'),
-            'date' => \request('date'),
+        $request->validate([
+            'user_id' => ['required', 'numeric'],
+            'patient_id' => ['required', 'numeric', 'exists:patients,id'],
+            'consommable' => ['required', 'string'],
+            'jour' => ['nullable', 'numeric', 'min:0'],
+            'nuit' => ['nullable', 'numeric', 'min:0'],
+            'date' => ['required', 'date'],
         ]);
 
-        $produits = Produit::where('designation', '=', request('consommable'))->get();
+        DB::transaction(function () use ($request) {
+            $consommable = FicheConsommable::create([
+                'user_id' => $request->input('user_id'),
+                'patient_id' => $request->input('patient_id'),
+                'consommable' => $request->input('consommable'),
+                'jour' => $request->input('jour'),
+                'nuit' => $request->input('nuit'),
+                'date' => $request->input('date'),
+            ]);
 
-        foreach ($produits as $produit){
+            $quantites = collect([
+                $request->input('jour'),
+                $request->input('nuit')
+            ])->filter()->sum();
 
-            if (!empty(\request('jour'))){
+            if ($quantites > 0) {
+                Produit::where('designation', $consommable->consommable)
+                    ->select('id', 'qte_stock')
+                    ->lockForUpdate()
+                    ->get()
+                    ->each(function ($produit) use ($request) {
+                        $jour = (int) $request->input('jour', 0);
+                        $nuit = (int) $request->input('nuit', 0);
 
-                $produit->qte_stock = $produit->qte_stock - \request('jour');
-                $produit->save();
+                        $produit->qte_stock = max(0, $produit->qte_stock - ($jour + $nuit));
+                        $produit->save();
+                    });
             }
-            if (!empty(\request('nuit'))){
-                $produit->qte_stock = $produit->qte_stock - \request('nuit');
-                $produit->save();
-            }
-        }
+        });
 
-         flash('La liste des consommables a été mis à jour')->info();
+        Cache::tags(['patients'])->flush();
+
+        flash('La liste des consommables a été mis à jour')->info();
         return back();
     }
 
-    public function SoinsInfirmierStore()
+    public function SoinsInfirmierStore(Request $request)
     {
         SoinsInfirmier::create([
-
-            "user_id" => \auth()->id(),
-            "patient_id" => \request('patient_id'),
-            "date" => \request('date'),
-            "observation" => \request('observation'),
-            "patient_externe" => \request('patient_externe'),
+            'user_id' => auth()->id(),
+            'patient_id' => $request->input('patient_id'),
+            'date' => $request->input('date'),
+            'observation' => $request->input('observation'),
+            'patient_externe' => $request->input('patient_externe'),
         ]);
+
+        Cache::tags(['patients'])->flush();
 
         Flash::info('Votre enregistrement a bien été pris en compte');
 
@@ -397,18 +575,31 @@ class PatientsController extends Controller
         return $pdf->stream('ordonance.pdf');
     }
 
-    public function search(Request $request){
+   public function search(Request $request)
+    {
         $this->authorize('update', Patient::class);
+        
         $name = $request->input('name');
-        $patients = Patient::where('prenom', 'like', "%{$name}%")
-        ->orWhere('name', 'like', "%{$name}%")
-        ->paginate(10);
-        return view('admin.patients.index',compact('patients','name'));
-
+        
+        // Optimize search with proper indexing
+        $patients = Patient::select('id', 'numero_dossier', 'name', 'prenom', 'montant', 'reste')
+            ->where(function($query) use ($name) {
+                $query->where('prenom', 'like', "%{$name}%")
+                    ->orWhere('name', 'like', "%{$name}%");
+            })
+            ->latest()
+            ->paginate(10);
+        
+        return view('admin.patients.index', compact('patients', 'name'));
     }
 
 
 }
+
+
+
+
+
 
 
 

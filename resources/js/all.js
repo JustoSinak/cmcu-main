@@ -1,9 +1,23 @@
+// Import jQuery
 import $ from 'jquery';
 window.$ = window.jQuery = $;
 
-// Import DataTables to attach to jQuery
-import 'datatables.net';
-import 'datatables.net-bs5';
+// Initialize DataTables
+$(document).ready(function() {
+    try {
+        $('#users-table').DataTable({
+            initComplete: function() {
+                // Fix for column().every() error
+                this.api().columns().every(function() {
+                    var column = this;
+                    // Your column logic here
+                });
+            }
+        });
+    } catch (error) {
+        console.error('DataTables initialization error:', error);
+    }
+});
 
 // Import FroalaEditor and make it global
 import FroalaEditor from 'froala-editor';

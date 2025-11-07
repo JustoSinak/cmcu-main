@@ -31,6 +31,11 @@ class CreateClientsTable extends Migration {
 			$table->string('prise_en_charge')->nullable();
 			$table->string('date_insertion')->nullable();
 			$table->string('medecin_r')->nullable();
+
+			// Remove duplicate foreign key, keep only performance indexes
+			$table->index(['nom', 'prenom']);
+			$table->index(['assurance', 'numero_assurance']);
+			$table->index('medecin_r');
 		});
 	}
 
@@ -42,6 +47,11 @@ class CreateClientsTable extends Migration {
 	 */
 	public function down()
 	{
+		Schema::table('clients', function(Blueprint $table) {
+			$table->dropIndex(['nom', 'prenom']);
+			$table->dropIndex(['assurance', 'numero_assurance']);
+			$table->dropIndex(['medecin_r']);
+		});
 		Schema::drop('clients');
 	}
 

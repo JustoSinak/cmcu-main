@@ -42,7 +42,7 @@
                             <h5>LITS</h5>
                         </div>
                         <div class="s-r">
-                            <h6>{{ count(\App\Models\Chambre::all()) }}
+                            <h6>{{ $chambres }}
                                 <i class="fas fa-tasks"></i>
                             </h6>
                         </div>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="s-r">
                         <h6>
-                            {{ count(\App\Models\Fiche::all()) }}
+                            {{ $fiches }}
                             <i class="fas fa-tasks"></i>
                         </h6>
                     </div>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="s-r">
                         <h6>
-                            {{ count(\App\Models\Produit::all()) }}
+                            {{ $produits }}
                             <i class="fas fa-tasks"></i>
                         </h6>
                     </div>

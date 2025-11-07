@@ -1,7 +1,7 @@
-﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Facture de {{ strtolower($patient->details_motif) ?? 'consultation'}}</title>
+    <title>Facture de {{ $patient->details_motif ? strtolower($patient->details_motif) : 'consultation'}}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ asset('admin/css/bootstrap3.3.7.css') }}" rel="stylesheet" type="text/css" media="all" />
@@ -240,7 +240,7 @@
                         </tr>
                     <tr>
                         <div class="notices">
-                           <H6><div>LA CAISSE:{{ $patient->user->prenom }} {{ $patient->user->name }}</div></H6>
+                           <H6><div>LA CAISSE:{{ $patient->user ? $patient->user->prenom . ' ' . $patient->user->name : 'N/A' }}</div></H6>
                            <H6><div class="notice">Douala,{{ $patient->created_at->toFormattedDateString() }}</div></H6>
                         </div>
                     </tr>
@@ -312,7 +312,7 @@
                          </tr>
                         <tr>
                             <div class="notices">
-                                <H6><div>LA CAISSE: {{ $patient->user->prenom }} {{ $patient->user->name }}</div></H6>
+                                <H6><div>LA CAISSE: {{ $patient->user ? $patient->user->prenom . ' ' . $patient->user->name : 'N/A' }}</div></H6>
                                 <H6><div class="notice">Douala,{{ $patient->created_at->toFormattedDateString() }}</div></H6>
                             </div>
                         </tr>

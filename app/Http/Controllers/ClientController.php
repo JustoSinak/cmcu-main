@@ -19,7 +19,7 @@ class ClientController extends Controller
     public function index()
     {
         $this->authorize('update', Patient::class);
-        $clients = Client::with('user')->latest()->paginate(100);
+        $clients = Client::with('user')->latest()->paginate(50);
         return view('admin.clients.index', compact('clients'));
 
     }

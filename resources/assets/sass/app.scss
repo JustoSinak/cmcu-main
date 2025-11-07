@@ -1,17 +1,20 @@
+// Use modern Sass @use instead of @import
+@use 'variables' as *;
+@use 'bootstrap/scss/bootstrap' as *;
 
-// Variables - MUST be first
-@use 'variables';
 
-// Bootstrap
-@use 'bootstrap/scss/bootstrap';
-@use '@fortawesome/fontawesome-free/css/fontawesome';
-@use '@fortawesome/fontawesome-free/css/solid';
-@use '@fortawesome/fontawesome-free/css/regular';
-@use '@fortawesome/fontawesome-free/css/brands';
 
-// Fonts - comes after @use rules
+// Import Font Awesome with explicit font path so compiled CSS references /build/webfonts
+@use '@fortawesome/fontawesome-free/scss/fontawesome' with ($fa-font-path: '/build/webfonts');
+@use '@fortawesome/fontawesome-free/scss/regular';
+@use '@fortawesome/fontawesome-free/scss/solid';
+@use '@fortawesome/fontawesome-free/scss/brands';
+
+
+
+// External CSS imports (Google Fonts allowed as pure CSS)
 @import url('https://fonts.googleapis.com/css?family=Nunito');
-
+// Style rules
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);

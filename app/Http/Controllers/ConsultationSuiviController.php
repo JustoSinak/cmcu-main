@@ -7,35 +7,36 @@ use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use ZanySoft\LaravelPDF\Facades\PDF;
+// use ZanySoft\LaravelPDF\Facades\PDF;
+use ZanySoft\LaravelPDF\PDF;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 
 class ConsultationSuiviController extends Controller
 {
-    public function create(patient $patient)
+    public function create(Patient $patient)
     {
-
         $this->authorize('chirurgien', Patient::class);
-        $consultationdesuivi = ConsultationSuivi::with('patient')->where('patient_id', $patient->id)->get();
+        $consultationdesuivi = Cache::remember("consultation_suivi_patient_{$patient->id}", 600, function () use ($patient) {
+            return ConsultationSuivi::with('patient')->where('patient_id', $patient->id)->select('id','interrogatoire','commentaire','date_creation','patient_id')->get();
+        });
         return view('admin.suivi_consultation.create', compact('patient','consultationdesuivi'));
     }
 
     public function store(Request $request)
     {
         $this->authorize('chirurgien', Patient::class);
-       
-        $consultationsuivi = new ConsultationSuivi ();
-
-       
-        $consultationsuivi->interrogatoire = $request->get('interrogatoire');
-        $consultationsuivi->commentaire = $request->get('commentaire');
-        $consultationsuivi->date_creation = $request->get('date_creation');
-        
-       $consultationsuivi->patient_id = $request->patient_id;
-        $consultationsuivi->user_id = Auth::id();
-        
-        $consultationsuivi->save();
-
+        DB::transaction(function () use ($request) {
+            $consultationsuivi = new ConsultationSuivi();
+            $consultationsuivi->interrogatoire = $request->input('interrogatoire');
+            $consultationsuivi->commentaire = $request->input('commentaire');
+            $consultationsuivi->date_creation = $request->input('date_creation');
+            $consultationsuivi->patient_id = $request->input('patient_id');
+            $consultationsuivi->user_id = Auth::id();
+            $consultationsuivi->save();
+            Cache::forget("consultation_suivi_patient_{$consultationsuivi->patient_id}");
+        });
         Flash('la nouvelle consultation de suivi  a été crée avec succès !!');
         return back();
     }

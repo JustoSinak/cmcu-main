@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class DAteBilan 
+class DateBilan
 {
 
 }

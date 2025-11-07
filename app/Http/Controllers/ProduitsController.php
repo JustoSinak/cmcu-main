@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Facture;
-use App\Models\Http\Requests\ProduitRequest;
+use App\Http\Requests\ProduitRequest;
 use App\Models\Patient;
 use App\Models\Produit;
 // use Barryvdh\DomPDF\Facade as PDF;
@@ -14,13 +14,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cache;
 
 class ProduitsController extends Controller
 {
     public function index()
     {
-        $produitCount = Produit::count();
-        $produits = Produit::orderBy('id', 'asc')->paginate(100);
+        // Cache product count
+        $produitCount = Cache::remember('produits_count', 600, function () {
+            return Produit::count();
+        });
+        
+        $produits = Produit::select(['id', 'designation', 'categorie', 'qte_stock', 'qte_alerte', 'prix_unitaire'])
+            ->orderBy('id', 'asc')
+            ->paginate(200);
 
         return view('admin.produits.index', compact('produits', 'produitCount'));
     }
@@ -73,7 +80,7 @@ class ProduitsController extends Controller
         $this->authorize('create', Produit::class);
 
 
-        $input = Input::get('qte_stock');
+        $input = $request->input('qte_stock');
         $nqte = DB::table('produits')->where('qte_stock', $produit->qte_stock)->sum('qte_stock');
 
         $produit->qte_stock = $input + $nqte;
@@ -95,19 +102,19 @@ class ProduitsController extends Controller
 
     public function stock_pharmaceutique()
     {
+        $produits = Produit::where('categorie', 'PHARMACEUTIQUE')
+            ->select('id', 'designation', 'qte_stock', 'qte_alerte', 'prix_unitaire')
+            ->paginate(200);
+        
+        $pharmaCount = Produit::where('categorie', 'PHARMACEUTIQUE')->count();
 
-        $produits = Produit::where('categorie', '=', 'PHARMACEUTIQUE')->paginate(100);
-        $pharmaCount = count($produits);
-
-
-        return view('admin.produits.pharmaceutique', array_merge(['produits' => $produits], ['pharmaCount' => $pharmaCount]));
+        return view('admin.produits.pharmaceutique', compact('produits', 'pharmaCount'));
     }
-
 
     public function stock_materiel()
     {
 
-        $produits = Produit::where('categorie', '=', 'MATERIEL')->paginate(100);
+        $produits = Produit::where('categorie', '=', 'MATERIEL')->paginate(50);
 
         $materielCount = count($produits);
 
@@ -120,7 +127,7 @@ class ProduitsController extends Controller
 //        $this->authorize('anesthesiste', Produit::class);
 //        $this->authorize('update', Produit::class);
 
-        $produits = Produit::where('categorie', '=', 'ANESTHESISTE')->paginate(100);
+        $produits = Produit::where('categorie', '=', 'ANESTHESISTE')->paginate(50);
         $pharmaCount = count($produits);
 
 
@@ -130,34 +137,21 @@ class ProduitsController extends Controller
 
     public function add_to_cart(Request $request, $id)
     {
-        $produit = Produit::find($id);
+        // Use select to retrieve only necessary columns
+        $produit = Produit::select(['id', 'designation', 'qte_stock', 'qte_alerte', 'prix_unitaire', 'categorie'])
+            ->findOrFail($id);
 
-        if ($produit->qte_stock == 0){
-
-            if (auth()->user()->id === 7 ) {
-                return redirect()->route('produits.pharmaceutique')->with('error', 'Le produit n\'est plus disponible en stock impossible de l\'ajouter à la facture');
-            }else{
-                return redirect()->route('produits.anesthesiste')->with('error', 'Le produit n\'est plus disponible en stock impossible de l\'ajouter à la facture');
-            }
-
-        }elseif($produit->qte_stock <= $produit->qte_alerte){
-
-            $oldCart = Session::has('cart') ? Session::get('cart') : null;
-            $cart =new Cart($oldCart);
-            $cart->add($produit, $produit->id);
-
-            $request->session()->put('cart', $cart);
-
-
-            if (auth()->user()->role_id === 7 ) {
-                return redirect()->route('produits.pharmaceutique')->with('info', 'Le produit a bien été ajouté à la facture, mais attention le stock d\'alerte pour ce produit a été atteind');
-            }else{
-                return redirect()->route('produits.anesthesiste')->with('info', 'Le produit a bien été ajouté à la facture, mais attention le stock d\'alerte pour ce produit a été atteind');
-            }
+        if ($produit->qte_stock == 0) {
+            $route = auth()->user()->role_id === 7 
+                ? 'produits.pharmaceutique' 
+                : 'produits.anesthesiste';
+                
+            return redirect()->route($route)
+                ->with('error', 'Le produit n\'est plus disponible en stock');
         }
 
-        $oldCart = Session::has('cart') ? Session::get('cart') : null;
-        $cart =new Cart($oldCart);
+        $oldCart = Session::get('cart', null);
+        $cart = new Cart($oldCart);
         $cart->add($produit, $produit->id);
 
         $request->session()->put('cart', $cart);
@@ -166,7 +160,6 @@ class ProduitsController extends Controller
 
         return redirect()->route('pharmaceutique.facturation');
     }
-
     public function facturation()
     {
 
@@ -252,3 +245,20 @@ class ProduitsController extends Controller
         return $pdf->stream('pharmacie.pdf');
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

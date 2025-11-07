@@ -23,6 +23,8 @@ class CreateEventsTable extends Migration
 			$table->timestamps();
 			$table->integer('user_id')->nullable();
 			$table->integer('patient_id')->nullable();
+			// Add indexes on date columns and foreign keys
+			$table->index(['date', 'start_time']); // Composite index for date queries
 		});
 	}
 
@@ -34,6 +36,9 @@ class CreateEventsTable extends Migration
 	 */
 	public function down()
 	{
+		Schema::table('events', function(Blueprint $table) {
+			$table->dropIndex(['date', 'start_time']);
+		});
 		Schema::drop('events');
 	}
 }

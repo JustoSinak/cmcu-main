@@ -1,12 +1,10 @@
-# Migration from Laravel Mix to Vite
+# Task: Ensure Styling Matches Vite Config and Fix Pagination Order
 
-- [x] Delete webpack.mix.js
-- [x] Create vite.config.js with Laravel plugin and entry points
-- [x] Create resources/css/all.scss importing admin styles
-- [x] Create resources/js/all.js importing admin scripts
-- [x] Convert require() to import in resources/assets/js/app.js
-- [x] Convert require() to import in resources/assets/js/bootstrap.js
-- [x] Update Blade templates to use @vite() instead of mix()
-- [x] Run npm install if needed
-- [x] Test npm run dev and npm run build
-- [x] Fix build errors by moving scripts to resources/js/admin/ and using npm packages
+## Completed
+- Analyzed resources/views/admin/events/index.blade.php and vite.config.js - styling already matches vite inputs.
+
+## Pending Tasks
+1. Update PatientsController index() method to order patients in ascending order by created_at.
+2. Update PatientsController search() method to order patients in ascending order by created_at.
+3. Update RolesController index() method to order roles in ascending order by id.
+4. Update UsersController index() method to order users in ascending order by id.

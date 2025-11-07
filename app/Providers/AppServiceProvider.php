@@ -13,13 +13,22 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
+   /**  public function register()
+    * {
+    *    if ($this->app->environment() !== 'production') {
+    *       $this->app->register(IdeHelperServiceProvider::class);
+    *  }
+    *}
+    */
     public function register()
     {
         if ($this->app->environment() !== 'production') {
-            $this->app->register(IdeHelperServiceProvider::class);
+            // Only register the IDE helper if the package class exists to avoid compile errors
+            if (class_exists('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider')) {
+                $this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
+            }
         }
     }
-
     /**
      * Bootstrap any application services.
      *

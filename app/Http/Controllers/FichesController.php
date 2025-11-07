@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Fiche;
-// use Barryvdh\DomPDF\Facade as PDF;
 use ZanySoft\LaravelPDF\PDF;
 
 
@@ -15,7 +14,7 @@ class FichesController extends Controller
     {
 
         $ficheCount = Fiche::count();
-        $fiche = Fiche::orderBy('id', 'asc')->paginate(100);
+        $fiche = Fiche::orderBy('id', 'asc')->paginate(50);
         return view('admin.fiches.index', compact('fiche', 'ficheCount'));
     }
 
@@ -70,7 +69,7 @@ class FichesController extends Controller
 
     public function show($id)
     {
-        $fiche = Fiche::where('id', $id)->first();
+        $fiche = Fiche::findOrFail($id);
         return view('admin.fiches.show', compact('fiche'));
     }
 

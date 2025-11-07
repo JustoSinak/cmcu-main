@@ -14,9 +14,9 @@ class RolesController extends Controller
     public function index()
     {
 
-        $roles = Role::orderBy('id', 'desc')->paginate(100);
+        $roles = Role::orderBy('id', 'desc')->paginate(50);
 
-        return view('admin.roles.index')->withRoles($roles);
+        return view('admin.roles.index', compact('roles'));
     }
 
     public function create()
@@ -40,13 +40,13 @@ class RolesController extends Controller
     public function show($id)
     {
         $role = Role::where('id', $id)->first();
-        return view('admin.roles.show')->withRole($role);
+        return view('admin.roles.show')->with('user', $role);
     }
 
     public function edit($id)
     {
         $role = Role::where('id', $id)->first();
-        return view('admin.roles.edit')->withRole($role);
+        return view('admin.roles.edit')->with('user', $role);
     }
 
     public function update(Request $request, $id)

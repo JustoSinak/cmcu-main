@@ -80,6 +80,11 @@ class CreateDevisTable extends Migration {
 			$table->string('elements11')->nullable();
 			$table->string('elements12')->nullable();
 			$table->string('elements13')->nullable();
+			// Add foreign keys and indexes
+			$table->foreign('user_id')->references('id')->on('users');
+			$table->foreign('patient_id')->references('id')->on('patients');
+			$table->unique('nom');
+			$table->index('created_at');
 		});
 	}
 

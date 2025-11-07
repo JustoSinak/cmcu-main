@@ -8,15 +8,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+     <link rel="preload" href="{{ asset('resources/assets/sass/app.scss') }}" as="style">
+    <!-- Vite compiled CSS/JS -->
+    @vite([
+        'resources/assets/sass/app.scss',
+        'resources/css/all.scss',
+        'resources/js/app.js',
+        'resources/js/all.js',
+    ])
 
-    @vite(['resources/assets/sass/app.scss', 'resources/css/all.scss'])
-    <link rel="stylesheet" href="{{ asset('admin/datatables/css/dataTables.bootstrap4.css') }}" />
+    <!-- tiny fallback: define waitForjQuery early so inline pages don't error if they run before bundle -->
+    <script>
+        window.waitForjQuery = window.waitForjQuery || function (cb) {
+            if (window.jQuery) return cb();
+            var tries = 0, i = setInterval(function(){
+                if (window.jQuery) { clearInterval(i); cb(); }
+                if (++tries > 200) clearInterval(i);
+            }, 50);
+        };
+    </script>
+
     <link rel="shortcut icon" type="image/png" href="{{ asset('admin/images/faviconlogo.ico') }}" />
 
-    <link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+    <!-- <link href="//fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet"> -->
+    <link rel="preconnect" href="//fonts.googleapis.com/css?family=Poiret+One">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
-    
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css"> -->
+    <link rel="preconnect" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+
     <!-- Load jQuery first, before Vite -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     
@@ -61,14 +82,32 @@
 
 @yield('content')
 
-<!-- Load Vite bundles -->
-@vite(['resources/js/all.js', 'resources/assets/js/app.js', 'resources/js/typehead.js'])
+<!-- Load JavaScript at end of body -->
+<script type="module">
+    // Ensure jQuery is loaded before other scripts
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof waitForjQuery === 'function') {
+            waitForjQuery(function() {
+                // jQuery is loaded and ready
+                console.log('jQuery is ready');
+            });
+        }
+    });
+</script>
 
 <!-- Load jQuery-dependent scripts AFTER Vite -->
-<script src="{{ asset('admin/datatables/js/jquery.dataTables.js') }}"></script>
-<script src="{{ asset('admin/datatables/js/dataTables.bootstrap4.js') }}"></script>
+    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js"></script>
 <script src="{{ asset('vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
 <!-- Wrap all jQuery code in document ready -->
 <script>
